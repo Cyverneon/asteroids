@@ -74,7 +74,7 @@ void MainGame::loadPhysicsEngine() {
 
 // 🔹 Loads Meshes
 void MainGame::loadMeshes() {
-	susanna.loadModel("..\\res\\monkey3.obj");
+	susanna.loadModel("..\\res\\asteroid1.obj");
 	playerMesh.loadModel("..\\res\\monkey3.obj");
 }
 
