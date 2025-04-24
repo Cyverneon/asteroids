@@ -94,7 +94,7 @@ void MainGame::setupUBOs() {
 	UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4) * 2, glm::value_ptr(identity), sizeof(glm::mat4));
 }
 
-// 🔹 Loads and sets up shaders
+// Loads and sets up shaders
 void MainGame::loadShaders() {
 	ShaderManager::getInstance().loadShader("ADS", "..\\res\\ADS.vert", "..\\res\\ADS.frag");
 	setActiveShader("ADS");
@@ -103,13 +103,13 @@ void MainGame::loadShaders() {
 	UBOManager::getInstance().bindUBOToShader("Matrices", ShaderManager::getInstance().getShader("ADS")->ID(), "Matrices");
 }
 
-// 🔹 Sets up Camera
+// Sets up Camera
 void MainGame::setupCamera() {
 	myCamera.initCamera(glm::vec3(0, 15, 0), 70.0f,
 		(float)_gameDisplay.getWidth() / _gameDisplay.getHeight(), 0.01f, 1000.0f);
 }
 
-// 🔹 Sets up Transforms for objects
+// Sets up Transforms for objects
 void MainGame::setupTransforms() {
 	TransformManager::getInstance().addTransform("susanna", Transform(glm::vec3(0, 0, 0),
 		glm::vec3(0, 0, 0),
@@ -132,8 +132,10 @@ void MainGame::createGameObjects() { //this can be improved, we might return to 
 
 void MainGame::gameLoop() {
 	while (_gameState != GameState::EXIT) {
+		std::cout << deltaTime;
 		processInput();
-		updatePlayer(deltaTime);
+		movePlayer();
+		updatePlayer();
 		drawGame();
 		calculateDeltaTime();
 		//bool colliding = checkCollisionRadius(player, &gameObjects[0], 0.8f, 0.8f);
@@ -160,8 +162,6 @@ void MainGame::processInput()
 			break;
 		}
 	}
-
-	movePlayer();
 }
 
 void MainGame::movePlayer()
@@ -177,7 +177,7 @@ void MainGame::movePlayer()
 	{
 		if (applyThrust)
 		{
-			applyThrust(player, playerSpeed);  // Apply forward force
+			applyThrust(player, playerSpeed*deltaTime);  // Apply forward force
 		}
 	}
 
@@ -185,7 +185,7 @@ void MainGame::movePlayer()
 	if (kbState[SDL_SCANCODE_S])
 	{
 		if (applyThrust) {
-			applyThrust(player, -playerSpeed);
+			applyThrust(player, -playerSpeed*deltaTime);
 		}
 	}
 
@@ -193,7 +193,7 @@ void MainGame::movePlayer()
 	if (kbState[SDL_SCANCODE_A])
 	{
 		if (setForwardDirection) {
-			glm::vec3 newRotation = glm::vec3(0.0f, playerTransform.rot.y + glm::radians(playerRotSpeed), 0.0f);
+			glm::vec3 newRotation = glm::vec3(0.0f, playerTransform.rot.y + glm::radians(playerRotSpeed*deltaTime), 0.0f);
 			playerTransform.SetRot(newRotation);
 
 			/*		forward.x = cos(pitch) * sin(yaw);
@@ -207,7 +207,7 @@ void MainGame::movePlayer()
 	if (kbState[SDL_SCANCODE_D])
 	{
 		if (setForwardDirection) {
-			glm::vec3 newRotation = glm::vec3(0.0f, playerTransform.rot.y - glm::radians(playerRotSpeed), 0.0f);
+			glm::vec3 newRotation = glm::vec3(0.0f, playerTransform.rot.y - glm::radians(playerRotSpeed*deltaTime), 0.0f);
 			playerTransform.SetRot(newRotation);
 			setForwardDirection(player, glm::vec3((cos(newRotation.x) * sin(newRotation.y)), -sin(newRotation.x), (cos(newRotation.x) * cos(newRotation.y))));
 		}
@@ -219,7 +219,7 @@ void MainGame::movePlayer()
 		<< player->transform->GetPos()->z << '\n';
 }
 
-void MainGame::updatePlayer(float deltaTime) {
+void MainGame::updatePlayer() {
 	if (!player) return;
 
 	// Apply velocity to position

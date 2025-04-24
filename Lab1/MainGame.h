@@ -41,9 +41,9 @@ private:
 	void setupTransforms();
 	void createGameObjects();
 	void loadPhysicsEngine();
-	void movePlayer();
 	void initPlayer(Mesh* playerMesh);
-	void updatePlayer(float deltaTime);
+	void movePlayer();
+	void updatePlayer();
 	float getRefreshRate();
 
 
@@ -74,7 +74,7 @@ private:
 	bool (*checkCollisionRadius)(const GameObject*, const GameObject*, float, float) = nullptr;
 	bool (*checkCollisionAABB)(const GameObject*, const GameObject*, const glm::vec3&, const glm::vec3&);
 
-	float playerSpeed = 0.5f;
-	float playerRotSpeed = 3.0f;
+	float playerSpeed = 100.0f;
+	float playerRotSpeed = 180.0f;
 };
 
