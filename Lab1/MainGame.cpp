@@ -75,7 +75,7 @@ void MainGame::loadPhysicsEngine() {
 // 🔹 Loads Meshes
 void MainGame::loadMeshes() {
 	susanna.loadModel("..\\res\\asteroid1.obj");
-	playerMesh.loadModel("..\\res\\monkey3.obj");
+	playerMesh.loadModel("..\\res\\ship.obj");
 }
 
 // 🔹 Loads Textures
@@ -144,7 +144,7 @@ void MainGame::gameLoop() {
 		if (colliding)
 			glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
 		else
-			glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	}
 }
 
