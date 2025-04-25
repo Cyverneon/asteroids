@@ -11,8 +11,8 @@ extern "C" PHYSICS_API void applyThrust(GameObject * obj, float thrustAmount) {
 }
 
 extern "C" PHYSICS_API void updatePhysics(GameObject * obj, float deltaTime) {
-    float dragFactor = 0.99f;
-    obj->velocity *= dragFactor;
+    float dragFactor = 0.999f;
+    obj->velocity *= (dragFactor*deltaTime);
 }
 
 extern "C" PHYSICS_API bool checkCollisionRadius(const GameObject* a, const GameObject* b, float radiusA, float radiusB)

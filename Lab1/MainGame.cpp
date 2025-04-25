@@ -194,7 +194,7 @@ void MainGame::movePlayer()
 	{
 		if (setForwardDirection) {
 			glm::vec3 newRotation = glm::vec3(0.0f, playerTransform.rot.y + glm::radians(playerRotSpeed*deltaTime), 0.0f);
-			playerTransform.SetRot(newRotation);
+			playerTransform.rot = newRotation;
 
 			/*		forward.x = cos(pitch) * sin(yaw);
 					forward.y = -sin(pitch);
@@ -208,15 +208,10 @@ void MainGame::movePlayer()
 	{
 		if (setForwardDirection) {
 			glm::vec3 newRotation = glm::vec3(0.0f, playerTransform.rot.y - glm::radians(playerRotSpeed*deltaTime), 0.0f);
-			playerTransform.SetRot(newRotation);
+			playerTransform.rot = newRotation;
 			setForwardDirection(player, glm::vec3((cos(newRotation.x) * sin(newRotation.y)), -sin(newRotation.x), (cos(newRotation.x) * cos(newRotation.y))));
 		}
 	}
-
-	std::cout << "Player Position: "
-		<< player->transform->GetPos()->x << '\n'
-		<< player->transform->GetPos()->y << '\n'
-		<< player->transform->GetPos()->z << '\n';
 }
 
 void MainGame::updatePlayer() {
@@ -225,11 +220,16 @@ void MainGame::updatePlayer() {
 	// Apply velocity to position
 	playerTransform.pos += player->velocity * deltaTime;
 
-	updatePhysics(player, deltaTime);
+	float maxX = 10;
+	float maxY = 800;
 
-	// Debugging: Ensure position updates
-	/*std::cout << "Player Position: "
-		<< player->transform->GetPos()->x << '\n';*/
+	std::cout << playerTransform.pos.x << std::endl;
+
+	if (playerTransform.pos.x > maxX)
+	{
+		playerTransform.pos.x = -maxX;
+	}
+	updatePhysics(player, deltaTime);
 }
 
 
@@ -304,7 +304,7 @@ void MainGame::clearScreenBuffer()
 void MainGame::drawGame() {
 	clearScreenBuffer();
 	renderPlayer();
-	renderGameObjects(); // Now handles full rendering
+	renderGameObjects();
 	_gameDisplay.swapBuffers();
 }
 

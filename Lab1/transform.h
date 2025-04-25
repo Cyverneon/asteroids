@@ -36,17 +36,6 @@ public:
 		return VP * M;//camera.GetViewProjection() * GetModel();
 	}*/
 
-	inline glm::vec3* GetPos() { return &pos; } //getters
-	inline glm::vec3* GetRot() { return &rot; }
-	inline glm::vec3* GetScale() { return &scale; }
-
-	inline void SetPos(glm::vec3& pos) { this->pos = pos; } // setters
-	inline void SetRot(glm::vec3& newRot) {
-		std::cout << "SetRot called: " << glm::degrees(newRot.y) << " degrees\n";
-		this->rot = newRot;
-	}
-	inline void SetScale(glm::vec3& scale) { this->scale = scale; }
-
 	glm::vec3 pos;
 	glm::vec3 rot;
 	glm::vec3 scale;
