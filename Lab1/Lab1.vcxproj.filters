@@ -25,23 +25,29 @@
     <Filter Include="Header Files\Game">
       <UniqueIdentifier>{0c7bd25b-150c-45ef-a788-87f28a1cc80f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Rendernig">
-      <UniqueIdentifier>{0b805df7-bd48-4e8a-a792-b645efa14bca}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Rendering">
       <UniqueIdentifier>{d1362264-04ec-44ab-a742-2d2919f22f5d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Rendernig\Base">
-      <UniqueIdentifier>{c4bc47ae-8072-4967-afe8-fd71300e0cca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Rendernig\Management">
-      <UniqueIdentifier>{e02e4973-b9b6-4572-8f50-f9ca0945c746}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Rendering\Base">
       <UniqueIdentifier>{adcd2127-3532-4903-8af3-b596090eb702}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Rendering\Management">
       <UniqueIdentifier>{a16d3a17-7cf7-4831-9a02-ad4a6c249830}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Rendering">
+      <UniqueIdentifier>{0b805df7-bd48-4e8a-a792-b645efa14bca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Rendering\Base">
+      <UniqueIdentifier>{c4bc47ae-8072-4967-afe8-fd71300e0cca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Rendering\Management">
+      <UniqueIdentifier>{e02e4973-b9b6-4572-8f50-f9ca0945c746}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game\Asteroids">
+      <UniqueIdentifier>{a9c3c80b-fabf-4d09-9b34-c242a06ab5dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Asteroids">
+      <UniqueIdentifier>{f8b09695-b299-4bd1-b0fb-96ae63c71b52}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -87,6 +93,9 @@
     <ClCompile Include="DLLManager.cpp">
       <Filter>Source Files\Rendering\Management</Filter>
     </ClCompile>
+    <ClCompile Include="Asteroids.cpp">
+      <Filter>Source Files\Game\Asteroids</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DisplayFacade.h">
@@ -102,40 +111,46 @@
       <Filter>Header Files\Display</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
-      <Filter>Header Files\Rendernig\Base</Filter>
+      <Filter>Header Files\Rendering\Base</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
-      <Filter>Header Files\Rendernig\Base</Filter>
+      <Filter>Header Files\Rendering\Base</Filter>
     </ClInclude>
     <ClInclude Include="obj_loader.h">
-      <Filter>Header Files\Rendernig\Base</Filter>
+      <Filter>Header Files\Rendering\Base</Filter>
     </ClInclude>
     <ClInclude Include="Shader.h">
-      <Filter>Header Files\Rendernig\Base</Filter>
+      <Filter>Header Files\Rendering\Base</Filter>
     </ClInclude>
     <ClInclude Include="stb_image.h">
-      <Filter>Header Files\Rendernig\Base</Filter>
+      <Filter>Header Files\Rendering\Base</Filter>
     </ClInclude>
     <ClInclude Include="Texture.h">
-      <Filter>Header Files\Rendernig\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="transform.h">
-      <Filter>Header Files\Rendernig\Base</Filter>
+      <Filter>Header Files\Rendering\Base</Filter>
     </ClInclude>
     <ClInclude Include="ShaderManager.h">
-      <Filter>Header Files\Rendernig\Management</Filter>
+      <Filter>Header Files\Rendering\Management</Filter>
     </ClInclude>
     <ClInclude Include="TransformManager.h">
-      <Filter>Header Files\Rendernig\Management</Filter>
+      <Filter>Header Files\Rendering\Management</Filter>
     </ClInclude>
     <ClInclude Include="UBOManager.h">
-      <Filter>Header Files\Rendernig\Management</Filter>
+      <Filter>Header Files\Rendering\Management</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
-      <Filter>Header Files\Rendernig\Management</Filter>
+      <Filter>Header Files\Rendering\Management</Filter>
     </ClInclude>
     <ClInclude Include="DLLManager.h">
-      <Filter>Header Files\Rendernig\Management</Filter>
+      <Filter>Header Files\Rendering\Management</Filter>
+    </ClInclude>
+    <ClInclude Include="transform.h">
+      <Filter>Header Files\Rendering\Management</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Asteroids.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

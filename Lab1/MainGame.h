@@ -11,6 +11,8 @@
 #include "transform.h"
 #include "DisplayFacade.h" 
 #include "GameObject.h"
+#include "Game.h"
+#include "Asteroids.h"
 
 enum class GameState{PLAY, EXIT};
 
@@ -31,50 +33,21 @@ private:
 	void drawGame();
 	void clearScreenBuffer();
 	void calculateDeltaTime();
-	void loadMeshes();
-	void loadTextures();
 	void setupUBOs();
-	void loadShaders();
 	void setupCamera();
 	void renderGameObjects();
-	void renderPlayer();
-	void setupTransforms();
-	void createGameObjects();
-	void loadPhysicsEngine();
-	void initPlayer(Mesh* playerMesh);
-	void movePlayer();
-	void updatePlayer();
 	float getRefreshRate();
 
 
 	DisplayFacade _gameDisplay;
 	GameState _gameState;
-	Mesh susanna;
-	Mesh playerMesh;
-	Camera myCamera;
-	Texture texture; 
-	Transform transform;
-	Transform playerTransform;
+	Camera _camera;
 
-	float counter;
+	float _deltaTime = 0.0f;
+	float _lastFrameTime = 0.0f;
+	float _fixedTimeStep = 0.0f;
 
-	float deltaTime = 0.0f;
-	float lastFrameTime = 0.0f;
-	float accumulator = 0.0f;
-	mutable float fixedTimeStep; // 60 physics updates per second
-
-	GameObject* player; // Store a pointer to the player object
-	std::vector<GameObject> gameObjects; // Store all game objects (for future automation)
-	std::string activeShaderTag; // Track the active shader
-
-	// Function pointers for physics engine functions
-	void (*setForwardDirection)(GameObject*, glm::vec3) = nullptr;
-	void (*applyThrust)(GameObject*, float) = nullptr;
-	void (*updatePhysics)(GameObject*, float) = nullptr;
-	bool (*checkCollisionRadius)(const GameObject*, const GameObject*, float, float) = nullptr;
-	bool (*checkCollisionAABB)(const GameObject*, const GameObject*, const glm::vec3&, const glm::vec3&);
-
-	float playerSpeed = 100.0f;
-	float playerRotSpeed = 180.0f;
+	Asteroids _game;
+	std::string _activeShaderTag;
 };
 

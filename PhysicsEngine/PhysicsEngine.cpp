@@ -1,16 +1,19 @@
 #include "PhysicsEngine.h"
 #include <iostream>
 
-extern "C" PHYSICS_API void setForwardDirection(GameObject * obj, glm::vec3 newForward) {
+extern "C" PHYSICS_API void setForwardDirection(GameObject* obj, glm::vec3 newForward)
+{
     obj->forwardDirection = glm::normalize(newForward);
 }
 
-extern "C" PHYSICS_API void applyThrust(GameObject * obj, float thrustAmount) {
+extern "C" PHYSICS_API void applyThrust(GameObject* obj, float thrustAmount)
+{
     obj->velocity += obj->forwardDirection * thrustAmount;
     std::cout << "Velocity: " << obj->velocity.x << ", " << obj->velocity.y << ", " << obj->velocity.z << std::endl;
 }
 
-extern "C" PHYSICS_API void updatePhysics(GameObject * obj, float deltaTime) {
+extern "C" PHYSICS_API void updatePhysics(GameObject * obj, float deltaTime)
+{
     float dragFactor = 0.999f;
     obj->velocity *= (dragFactor*deltaTime);
 }
