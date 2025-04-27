@@ -105,8 +105,6 @@ void Asteroids::movePlayer(float delta)
 	float maxX = 10;
 	float maxY = 800;
 
-	std::cout << playerTransform.pos.x << std::endl;
-
 	if (playerTransform.pos.x > maxX)
 	{
 		playerTransform.pos.x = -maxX;

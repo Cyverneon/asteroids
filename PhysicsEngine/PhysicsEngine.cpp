@@ -9,7 +9,6 @@ extern "C" PHYSICS_API void setForwardDirection(GameObject* obj, glm::vec3 newFo
 extern "C" PHYSICS_API void applyThrust(GameObject* obj, float thrustAmount)
 {
     obj->velocity += obj->forwardDirection * thrustAmount;
-    std::cout << "Velocity: " << obj->velocity.x << ", " << obj->velocity.y << ", " << obj->velocity.z << std::endl;
 }
 
 extern "C" PHYSICS_API void updatePhysics(GameObject * obj, float deltaTime)

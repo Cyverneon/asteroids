@@ -71,7 +71,8 @@ void MainGame::setupCamera()
 
 
 void MainGame::gameLoop() {
-	while (_gameState != GameState::EXIT) {
+	while (_gameState != GameState::EXIT)
+	{
 		processInput();
 		_game.updateGame(_deltaTime);
 		drawGame();
@@ -113,12 +114,8 @@ void MainGame::renderGameObjects()
 	// track current shader to avoid redundant binds
 	Shader* currentShader = nullptr;
 
-	std::cout << _game._gameObjects.size() << std::endl;
-
 	for (auto& obj : _game._gameObjects)
 	{
-		std::cout << "rendering a game object";
-
 		if (obj->shader != currentShader)
 		{
 			currentShader = obj->shader;
