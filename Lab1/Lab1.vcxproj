@@ -145,6 +145,7 @@
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="stb_image.c" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="TransformManager.cpp" />
     <ClCompile Include="UBOManager.cpp" />
     <ClCompile Include="Window.cpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="TextureManager.h" />
     <ClInclude Include="transform.h" />
     <ClInclude Include="TransformManager.h" />
     <ClInclude Include="UBOManager.h" />

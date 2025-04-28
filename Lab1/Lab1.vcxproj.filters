@@ -99,6 +99,9 @@
     <ClCompile Include="MeshManager.cpp">
       <Filter>Source Files\Rendering\Management</Filter>
     </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>Source Files\Rendering\Management</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DisplayFacade.h">
@@ -157,6 +160,9 @@
     </ClInclude>
     <ClInclude Include="Asteroids.h">
       <Filter>Header Files\Game\Asteroids</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>Header Files\Rendering\Management</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -49,10 +49,14 @@ void Asteroids::loadShaders()
 	UBOManager::getInstance().bindUBOToShader("Matrices", ShaderManager::getInstance().getShader("ADS")->ID(), "Matrices");
 }
 
+void Asteroids::loadTextures()
+{
+	TextureManager::getInstance().loadTexture("Water", "..\\res\\water.jpg");
+	TextureManager::getInstance().loadTexture("Bricks", "..\\res\\bricks.jpg");
+}
+
 void Asteroids::initPlayer()
 {
-	_playerTexture.init("..\\res\\bricks.jpg");
-
 	TransformManager::getInstance().addTransform("player", Transform(glm::vec3(0, 0, 0),
 		glm::vec3(0, 0, 0),
 		glm::vec3(1, 1, 1)));

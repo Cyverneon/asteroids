@@ -6,6 +6,7 @@
 #include "TransformManager.h"
 #include "ShaderManager.h"
 #include "MeshManager.h"
+#include "TextureManager.h"
 #include "UBOManager.h"
 
 class Game
@@ -16,6 +17,7 @@ public:
 
 	virtual void loadMeshes() {};
 	virtual void loadShaders() {};
+	virtual void loadTextures() {};
 	virtual void initialiseGame() {};
 	virtual void updateGame(float delta) {};
 

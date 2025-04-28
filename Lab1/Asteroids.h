@@ -19,12 +19,11 @@ public:
 	// override functions
 	void loadMeshes() override;
 	void loadShaders() override;
+	void loadTextures() override;
 	void initialiseGame() override;
 	void updateGame(float delta) override;
 
 private:
-	Texture _playerTexture;
-
 	GameObject* _player;
 
 	// units per second
