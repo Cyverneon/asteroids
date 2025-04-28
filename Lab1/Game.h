@@ -5,6 +5,7 @@
 #include "DLLManager.h"
 #include "TransformManager.h"
 #include "ShaderManager.h"
+#include "MeshManager.h"
 #include "UBOManager.h"
 
 class Game
@@ -13,6 +14,7 @@ public:
 	Game() {};
 	~Game() {};
 
+	virtual void loadMeshes() {};
 	virtual void loadShaders() {};
 	virtual void initialiseGame() {};
 	virtual void updateGame(float delta) {};

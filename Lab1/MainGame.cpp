@@ -27,6 +27,7 @@ void MainGame::initSystems()
 {
 	setupUBOs();
 	_game.loadShaders();
+	_game.loadMeshes();
 	_game.initialiseGame();
 	setupCamera();
 }

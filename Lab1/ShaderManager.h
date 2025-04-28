@@ -12,14 +12,14 @@ public:
     std::shared_ptr<Shader> loadShader(const std::string& tag, const std::string& vertFile, const std::string& fragFile);
     std::shared_ptr<Shader> getShader(const std::string& tag);
 
-    void clear(); // Cleanup shaders
+    void clear();
 
 private:
-    ShaderManager() = default;  // Private constructor (Singleton)
+    ShaderManager() = default;
     ~ShaderManager() = default;
     ShaderManager(const ShaderManager&) = delete;
     ShaderManager& operator=(const ShaderManager&) = delete;
 
-    std::unordered_map<std::string, std::shared_ptr<Shader>> shaders;
+    std::unordered_map<std::string, std::shared_ptr<Shader>> _shaders;
 };
  

@@ -17,12 +17,12 @@ public:
 	void movePlayer(float delta);
 
 	// override functions
+	void loadMeshes() override;
 	void loadShaders() override;
 	void initialiseGame() override;
 	void updateGame(float delta) override;
 
 private:
-	Mesh _playerMesh;
 	Texture _playerTexture;
 
 	GameObject* _player;

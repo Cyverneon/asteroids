@@ -36,6 +36,11 @@ void Asteroids::loadPhysicsEngine()
 	checkCollisionAABB = DLLManager::getInstance().getFunction<bool(*)(const GameObject*, const GameObject*, const glm::vec3&, const glm::vec3&)>("PhysicsEngine.dll", "checkCollisionAABB");
 }
 
+void Asteroids::loadMeshes()
+{
+	MeshManager::getInstance().loadMesh("PlayerShip", "..\\res\\ship.obj");
+}
+
 void Asteroids::loadShaders()
 {
 	ShaderManager::getInstance().loadShader("ADS", "..\\res\\ADS.vert", "..\\res\\ADS.frag");
@@ -46,14 +51,17 @@ void Asteroids::loadShaders()
 
 void Asteroids::initPlayer()
 {
-	_playerMesh.loadModel("..\\res\\ship.obj");
 	_playerTexture.init("..\\res\\bricks.jpg");
 
 	TransformManager::getInstance().addTransform("player", Transform(glm::vec3(0, 0, 0),
 		glm::vec3(0, 0, 0),
 		glm::vec3(1, 1, 1)));
 
-	_player = new GameObject(&_playerMesh, &TransformManager::getInstance().getTransform("player"), ShaderManager::getInstance().getShader("ADS").get());
+	_player = new GameObject(
+		MeshManager::getInstance().getMesh("PlayerShip").get(),
+		&TransformManager::getInstance().getTransform("player"),
+		ShaderManager::getInstance().getShader("ADS").get());
+
 	_gameObjects.push_back(_player);
 }
 
