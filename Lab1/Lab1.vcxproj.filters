@@ -102,6 +102,9 @@
     <ClCompile Include="TextureManager.cpp">
       <Filter>Source Files\Rendering\Management</Filter>
     </ClCompile>
+    <ClCompile Include="GameObjectManager.cpp">
+      <Filter>Source Files\Rendering\Management</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DisplayFacade.h">
@@ -162,6 +165,9 @@
       <Filter>Header Files\Game\Asteroids</Filter>
     </ClInclude>
     <ClInclude Include="TextureManager.h">
+      <Filter>Header Files\Rendering\Management</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectManager.h">
       <Filter>Header Files\Rendering\Management</Filter>
     </ClInclude>
   </ItemGroup>

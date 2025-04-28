@@ -3,6 +3,7 @@
 #include <vector>
 #include "GameObject.h"
 #include "DLLManager.h"
+#include "GameObjectManager.h"
 #include "TransformManager.h"
 #include "ShaderManager.h"
 #include "MeshManager.h"
@@ -20,7 +21,5 @@ public:
 	virtual void loadTextures() {};
 	virtual void initialiseGame() {};
 	virtual void updateGame(float delta) {};
-
-	std::vector<GameObject*> _gameObjects;
 };
 

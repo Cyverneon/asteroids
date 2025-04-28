@@ -24,10 +24,10 @@ public:
 	void updateGame(float delta) override;
 
 private:
-	GameObject* _player;
+	std::shared_ptr<GameObject> _player;
 
 	// units per second
-	float _playerSpeed = 100.0f;
+	float _playerSpeed = 50.0f;
 	// degrees per second
 	float _playerRotSpeed = 180.0f;
 

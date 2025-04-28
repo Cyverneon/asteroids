@@ -61,12 +61,11 @@ void Asteroids::initPlayer()
 		glm::vec3(0, 0, 0),
 		glm::vec3(1, 1, 1)));
 
-	_player = new GameObject(
-		MeshManager::getInstance().getMesh("PlayerShip").get(),
+	_player = GameObjectManager::getInstance().createGameObject(
+		"Player",
 		&TransformManager::getInstance().getTransform("player"),
+		MeshManager::getInstance().getMesh("PlayerShip").get(),
 		ShaderManager::getInstance().getShader("ADS").get());
-
-	_gameObjects.push_back(_player);
 }
 
 void Asteroids::movePlayer(float delta)
@@ -76,16 +75,18 @@ void Asteroids::movePlayer(float delta)
 	Transform& playerTransform = *(_player->transform);
 
 	const Uint8* kbState = SDL_GetKeyboardState(NULL);
-
-	// move forward and back by applying positive and negative thrust
+	
 	if (kbState[SDL_SCANCODE_W])
 	{
-		applyThrust(_player, _playerSpeed * delta);
+		applyThrust(_player.get(), _playerSpeed * delta);
 	}
 
+	 //backwards movement was disabled because it doesn't really make sense for the ship's thrusters to be able to reverse
+	 //and isn't possible in the actual asteroids game
+	 //left it here so it can be re-enabled if wanted
 	if (kbState[SDL_SCANCODE_S])
 	{
-		applyThrust(_player, -_playerSpeed * delta);
+		applyThrust(_player.get(), -_playerSpeed * delta);
 	}
 
 	// increase and decrease Y rotation
@@ -97,7 +98,7 @@ void Asteroids::movePlayer(float delta)
 	{
 		glm::vec3 newRotation = glm::vec3(0.0f, playerTransform.rot.y + glm::radians(_playerRotSpeed * delta), 0.0f);
 		playerTransform.rot = newRotation;
-		setForwardDirection(_player, glm::vec3(
+		setForwardDirection(_player.get(), glm::vec3(
 			(cos(newRotation.x) * sin(newRotation.y)),
 			-sin(newRotation.x),
 			(cos(newRotation.x) * cos(newRotation.y))));
@@ -106,7 +107,7 @@ void Asteroids::movePlayer(float delta)
 	{
 		glm::vec3 newRotation = glm::vec3(0.0f, playerTransform.rot.y - glm::radians(_playerRotSpeed * delta), 0.0f);
 		playerTransform.rot = newRotation;
-		setForwardDirection(_player, glm::vec3(
+		setForwardDirection(_player.get(), glm::vec3(
 			(cos(newRotation.x) * sin(newRotation.y)),
 			-sin(newRotation.x),
 			(cos(newRotation.x) * cos(newRotation.y))));
@@ -114,12 +115,26 @@ void Asteroids::movePlayer(float delta)
 
 	playerTransform.pos += _player->velocity * delta;
 
-	float maxX = 10;
-	float maxY = 800;
+	//float minX = -12.0;
+	//float maxX = 12.0;
+	//float minY = -7.0;
+	//float maxY = 7.0;
 
-	if (playerTransform.pos.x > maxX)
-	{
-		playerTransform.pos.x = -maxX;
-	}
-	updatePhysics(_player, delta);
+	//if (playerTransform.pos.x > maxX)
+	//{
+	//	playerTransform.pos.x = minX;
+	//}
+	//else if (playerTransform.pos.x < minX)
+	//{
+	//	playerTransform.pos.x = maxX;
+	//}
+	//if (playerTransform.pos.z > maxY)
+	//{
+	//	playerTransform.pos.z = minY;
+	//}
+	//else if (playerTransform.pos.z < minY)
+	//{
+	//	playerTransform.pos.z = maxY;
+	//}
+	updatePhysics(_player.get(), delta);
 }

@@ -135,6 +135,7 @@
     <ClCompile Include="Asteroids.cpp" />
     <ClCompile Include="DisplayFacade.cpp" />
     <ClCompile Include="DLLManager.cpp" />
+    <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="Mesh.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="DLLManager.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshManager.h" />

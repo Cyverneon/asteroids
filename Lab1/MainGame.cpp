@@ -7,7 +7,7 @@
 
 
 MainGame::MainGame()
-	: _gameDisplay("OpenGL Game", 1980, 1024), // Initialize the display wrapper
+	: _gameDisplay("OpenGL Game", 1920, 1080), // Initialize the display wrapper
 	_gameState(GameState::PLAY)
 {
 	_fixedTimeStep = 1.0f / getRefreshRate(); // Dynamically set refresh-based time step
@@ -31,6 +31,12 @@ void MainGame::initSystems()
 	_game.loadTextures();
 	_game.initialiseGame();
 	setupCamera();
+
+	glm::vec3 test = glm::unProject(glm::vec3(0, 0, 1), glm::mat4(1.0f), _camera.getProjection(), glm::vec4(0, 0, _gameDisplay.getWidth(), _gameDisplay.getHeight()));
+	std::cout << test.x << ", " << test.y << ", " << test.z << std::endl;
+
+	test = glm::unProject(glm::vec3(1920, 1080, 1), glm::mat4(1.0f), _camera.getProjection(), glm::vec4(0, 0, _gameDisplay.getWidth(), _gameDisplay.getHeight()));
+	std::cout << test.x << ", " << test.y << ", " << test.z << std::endl;
 }
 
 float MainGame::getRefreshRate()
@@ -116,8 +122,9 @@ void MainGame::renderGameObjects()
 	// track current shader to avoid redundant binds
 	Shader* currentShader = nullptr;
 
-	for (auto& obj : _game._gameObjects)
+	for (auto& gameObjectPair : GameObjectManager::getInstance().getGameObjects())
 	{
+		std::shared_ptr<GameObject> obj = gameObjectPair.second;
 		if (obj->shader != currentShader)
 		{
 			currentShader = obj->shader;
@@ -134,9 +141,6 @@ void MainGame::renderGameObjects()
 		UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4) * 2, glm::value_ptr(projection), sizeof(glm::mat4));
 
 		obj->mesh->draw();
-
-		float angle = SDL_GetTicks() * 0.0001f; // Convert milliseconds to seconds
-		glUniform1f(glGetUniformLocation(currentShader->ID(), "angle"), angle);
 	}
 }
 
