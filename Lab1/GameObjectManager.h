@@ -9,7 +9,7 @@ class GameObjectManager
 public:
 	static GameObjectManager& getInstance();
 
-	std::shared_ptr<GameObject> createGameObject(const std::string& tag, Transform* transform, Mesh* mesh, Shader* shader);
+	std::shared_ptr<GameObject> createGameObject(const std::string& tag, Transform* transform, const std::string meshTag, const std::string shaderTag);
 	std::shared_ptr<GameObject> getGameObject(const std::string& tag);
 
 	std::unordered_map<std::string, std::shared_ptr<GameObject>> getGameObjects() { return _gameObjects; }

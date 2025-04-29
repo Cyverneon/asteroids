@@ -22,6 +22,7 @@ void Renderer::setActiveShader(const std::string& shaderTag)
 	if (ShaderManager::getInstance().getShader(shaderTag))
 	{
 		_activeShaderTag = shaderTag;
+		ShaderManager::getInstance().getShader(_activeShaderTag)->Bind();
 		std::cout << "Shader switched to: " << shaderTag << std::endl;
 	}
 	else
@@ -38,20 +39,16 @@ void Renderer::clearScreenBuffer()
 
 void Renderer::renderGameObjects()
 {
-	// track current shader to avoid redundant binds
-	Shader* currentShader = nullptr;
-
 	for (auto& gameObjectPair : GameObjectManager::getInstance().getGameObjects())
 	{
 		std::shared_ptr<GameObject> obj = gameObjectPair.second;
-		if (obj->shader != currentShader)
-		{
-			currentShader = obj->shader;
-			currentShader->Bind();
-		}
+
+		// don't bother rebinding shader if it's the same
+		if (obj->_shaderTag != _activeShaderTag)
+			setActiveShader(obj->_shaderTag);
 
 		// Update UBO for this object's transform
-		glm::mat4 model = obj->transform->GetModel();
+		glm::mat4 model = obj->_transform->GetModel();
 		glm::mat4 view = _camera->getView();
 		glm::mat4 projection = _camera->getProjection();
 
@@ -59,11 +56,12 @@ void Renderer::renderGameObjects()
 		UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4), glm::value_ptr(view), sizeof(glm::mat4));
 		UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4) * 2, glm::value_ptr(projection), sizeof(glm::mat4));
 
-		obj->mesh->draw();
+		MeshManager::getInstance().getMesh(obj->_meshTag)->draw();
 	}
 }
 
-void Renderer::drawGame() {
+void Renderer::drawGame()
+{
 	clearScreenBuffer();
 	renderGameObjects();
 	_display->swapBuffers();

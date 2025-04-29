@@ -64,15 +64,15 @@ void Asteroids::initPlayer()
 	_player = GameObjectManager::getInstance().createGameObject(
 		"Player",
 		&TransformManager::getInstance().getTransform("player"),
-		MeshManager::getInstance().getMesh("PlayerShip").get(),
-		ShaderManager::getInstance().getShader("ADS").get());
+		"PlayerShip",
+		"ADS");
 }
 
 void Asteroids::movePlayer(float delta)
 {
 	if (!_player) return;
 
-	Transform& playerTransform = *(_player->transform);
+	Transform& playerTransform = *(_player->_transform);
 
 	const Uint8* kbState = SDL_GetKeyboardState(NULL);
 	

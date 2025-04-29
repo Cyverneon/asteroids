@@ -6,7 +6,7 @@ GameObjectManager& GameObjectManager::getInstance()
     return instance;
 }
 
-std::shared_ptr<GameObject> GameObjectManager::createGameObject(const std::string& tag, Transform* transform, Mesh* mesh, Shader* shader)
+std::shared_ptr<GameObject> GameObjectManager::createGameObject(const std::string& tag, Transform* transform, const std::string meshTag, const std::string shaderTag)
 {
     if (_gameObjects.find(tag) != _gameObjects.end())
     {
@@ -15,7 +15,7 @@ std::shared_ptr<GameObject> GameObjectManager::createGameObject(const std::strin
     }
 
     std::shared_ptr<GameObject> gameObject = std::make_shared<GameObject>();
-    gameObject->init(mesh, transform, shader);
+    gameObject->init(transform, meshTag, shaderTag);
     _gameObjects[tag] = gameObject;
     return gameObject;
 }

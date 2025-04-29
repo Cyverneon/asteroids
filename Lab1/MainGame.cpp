@@ -54,14 +54,14 @@ void MainGame::calculateDeltaTime()
 	_lastFrameTime = currentFrameTime;
 }
 
-// Sets up Camera
 void MainGame::setupCamera()
 {
 	_camera.initCamera(glm::vec3(0, 15, 0), 70.0f,
 		(float)_gameDisplay.getWidth() / _gameDisplay.getHeight(), 0.01f, 1000.0f);
 }
 
-void MainGame::gameLoop() {
+void MainGame::gameLoop()
+{
 	while (_gameState != GameState::EXIT)
 	{
 		processInput();

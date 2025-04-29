@@ -19,15 +19,15 @@ extern "C" PHYSICS_API void updatePhysics(GameObject * obj, float deltaTime)
 
 extern "C" PHYSICS_API bool checkCollisionRadius(const GameObject* a, const GameObject* b, float radiusA, float radiusB)
 {
-    float distance = glm::distance(a->transform->pos, b->transform->pos);
+    float distance = glm::distance(a->_transform->pos, b->_transform->pos);
     return distance < (radiusA + radiusB);
 }
 
 extern "C" PHYSICS_API bool checkCollisionAABB(const GameObject* a, const GameObject* b, const glm::vec3& halfExtentsA, const glm::vec3& halfExtentsB)
 {
     return (
-        abs(a->transform->pos.x - b->transform->pos.x) < (halfExtentsA.x + halfExtentsB.x) &&
-        abs(a->transform->pos.y - b->transform->pos.y) < (halfExtentsA.y + halfExtentsB.y) &&
-        abs(a->transform->pos.z - b->transform->pos.z) < (halfExtentsA.z + halfExtentsB.z)
+        abs(a->_transform->pos.x - b->_transform->pos.x) < (halfExtentsA.x + halfExtentsB.x) &&
+        abs(a->_transform->pos.y - b->_transform->pos.y) < (halfExtentsA.y + halfExtentsB.y) &&
+        abs(a->_transform->pos.z - b->_transform->pos.z) < (halfExtentsA.z + halfExtentsB.z)
         );
 }
