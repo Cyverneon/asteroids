@@ -1,10 +1,4 @@
 ﻿#include "MainGame.h"
-#include "Camera.h"
-#include "DLLManager.h"
-#include <glm/gtc/type_ptr.hpp>  
-#include <iostream>
-#include <string>
-
 
 MainGame::MainGame()
 	: _gameDisplay("OpenGL Game", 1920, 1080), // Initialize the display wrapper
@@ -25,7 +19,8 @@ void MainGame::run()
 
 void MainGame::initSystems()
 {
-	setupUBOs();
+	_renderer.setupUBOs();
+	_renderer.init(&_gameDisplay, &_camera);
 	_game.loadShaders();
 	_game.loadMeshes();
 	_game.loadTextures();
@@ -59,17 +54,6 @@ void MainGame::calculateDeltaTime()
 	_lastFrameTime = currentFrameTime;
 }
 
-void MainGame::setupUBOs()
-{
-	UBOManager::getInstance().createUBO("Matrices", sizeof(glm::mat4) * 3, 0);
-
-	// Initialize with identity matrices to avoid garbage data
-	glm::mat4 identity = glm::mat4(1.0f);
-	UBOManager::getInstance().updateUBOData("Matrices", 0, glm::value_ptr(identity), sizeof(glm::mat4));
-	UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4), glm::value_ptr(identity), sizeof(glm::mat4));
-	UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4) * 2, glm::value_ptr(identity), sizeof(glm::mat4));
-}
-
 // Sets up Camera
 void MainGame::setupCamera()
 {
@@ -77,13 +61,12 @@ void MainGame::setupCamera()
 		(float)_gameDisplay.getWidth() / _gameDisplay.getHeight(), 0.01f, 1000.0f);
 }
 
-
 void MainGame::gameLoop() {
 	while (_gameState != GameState::EXIT)
 	{
 		processInput();
 		_game.updateGame(_deltaTime);
-		drawGame();
+		_renderer.drawGame();
 		calculateDeltaTime();
 	}
 }
@@ -102,56 +85,3 @@ void MainGame::processInput()
 		}
 	}
 }
-
-
-void MainGame::setActiveShader(const std::string& shaderTag)
-{
-	if (ShaderManager::getInstance().getShader(shaderTag))
-	{
-		_activeShaderTag = shaderTag;
-		std::cout << "Shader switched to: " << shaderTag << std::endl;
-	}
-	else
-	{
-		std::cerr << "Error: Shader not found - " << shaderTag << std::endl;
-	}
-}
-
-void MainGame::renderGameObjects()
-{
-	// track current shader to avoid redundant binds
-	Shader* currentShader = nullptr;
-
-	for (auto& gameObjectPair : GameObjectManager::getInstance().getGameObjects())
-	{
-		std::shared_ptr<GameObject> obj = gameObjectPair.second;
-		if (obj->shader != currentShader)
-		{
-			currentShader = obj->shader;
-			currentShader->Bind();
-		}
-
-		// Update UBO for this object's transform
-		glm::mat4 model = obj->transform->GetModel();
-		glm::mat4 view = _camera.getView();
-		glm::mat4 projection = _camera.getProjection();
-
-		UBOManager::getInstance().updateUBOData("Matrices", 0, glm::value_ptr(model), sizeof(glm::mat4));
-		UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4), glm::value_ptr(view), sizeof(glm::mat4));
-		UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4) * 2, glm::value_ptr(projection), sizeof(glm::mat4));
-
-		obj->mesh->draw();
-	}
-}
-
-void MainGame::clearScreenBuffer()
-{
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
-
-void MainGame::drawGame() {
-	clearScreenBuffer();
-	renderGameObjects();
-	_gameDisplay.swapBuffers();
-}
-

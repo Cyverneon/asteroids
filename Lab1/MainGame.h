@@ -1,18 +1,11 @@
 #pragma once
-#include <SDL\SDL.h>
-#include <GL/glew.h>
+#include <iostream>
 #include <vector>
 #include <windows.h>  // Required for LoadLibrary & GetProcAddress
-#include "ShaderManager.h"
-#include "TransformManager.h"
-#include "UBOManager.h"
-#include "Mesh.h"
-#include "Texture.h"
-#include "transform.h"
-#include "DisplayFacade.h" 
-#include "GameObject.h"
 #include "Game.h"
+#include "Renderer.h"
 #include "Asteroids.h"
+#include "Camera.h"
 
 enum class GameState{PLAY, EXIT};
 
@@ -25,19 +18,12 @@ public:
 	void run();
 
 private:
-
-	void setActiveShader(const std::string& shaderTag);
 	void initSystems();
 	void processInput();
 	void gameLoop();
-	void drawGame();
-	void clearScreenBuffer();
 	void calculateDeltaTime();
-	void setupUBOs();
 	void setupCamera();
-	void renderGameObjects();
 	float getRefreshRate();
-
 
 	DisplayFacade _gameDisplay;
 	GameState _gameState;
@@ -48,6 +34,6 @@ private:
 	float _fixedTimeStep = 0.0f;
 
 	Asteroids _game;
-	std::string _activeShaderTag;
+	Renderer _renderer;
 };
 
