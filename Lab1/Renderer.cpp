@@ -57,6 +57,11 @@ void Renderer::renderGameObjects()
 		UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4), glm::value_ptr(view), sizeof(glm::mat4));
 		UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4) * 2, glm::value_ptr(projection), sizeof(glm::mat4));
 
+		for (int i = 0; i < obj.second->_textureTags.size(); i++)
+		{
+			TextureManager::getInstance().getTexture(obj.second->_textureTags[i])->Bind(i);
+		}
+
 		MeshManager::getInstance().getMesh(obj.second->_meshTag)->draw();
 	}
 }

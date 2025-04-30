@@ -14,6 +14,7 @@ public:
 		const std::string& tag,
 		const std::string meshTag,
 		const std::string shaderTag,
+		const std::vector<std::string> textureTags,
 		glm::vec3 pos = glm::vec3(0, 0, 0),
 		glm::vec3 rot = glm::vec3(0, 0, 0),
 		glm::vec3 scale = glm::vec3(1, 1, 1));

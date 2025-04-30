@@ -7,6 +7,7 @@
 #include "UBOManager.h"
 #include "MeshManager.h"
 #include "ShaderManager.h"
+#include "TextureManager.h"
 #include "GameObjectManager.h"
 #include "TransformManager.h"
 #include <glm/gtc/type_ptr.hpp>  

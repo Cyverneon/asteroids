@@ -10,6 +10,7 @@ std::shared_ptr<GameObject> GameObjectManager::createGameObject(
     const std::string& tag,
     const std::string meshTag,
     const std::string shaderTag,
+    const std::vector<std::string> textureTags,
     glm::vec3 pos,
     glm::vec3 rot,
     glm::vec3 scale)
@@ -20,7 +21,7 @@ std::shared_ptr<GameObject> GameObjectManager::createGameObject(
         return _gameObjects[tag];
     }
 
-    std::shared_ptr<GameObject> gameObject = std::make_shared<GameObject>(tag, meshTag, shaderTag, pos, rot, scale);
+    std::shared_ptr<GameObject> gameObject = std::make_shared<GameObject>(tag, meshTag, shaderTag, textureTags, pos, rot, scale);
     _gameObjects[tag] = gameObject;
     return gameObject;
 }

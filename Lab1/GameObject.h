@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include <string>
 #include "Transform.h"
 #include "TransformManager.h"
@@ -7,6 +8,7 @@
 struct GameObject {
     std::string _meshTag;
     std::string _shaderTag;
+    std::vector<std::string> _textureTags;
 
     glm::vec3 forwardDirection = glm::vec3(0, 0, 1);  // Default forward (Z-axis)
     glm::vec3 velocity = glm::vec3(0);               // Initial velocity
@@ -15,9 +17,10 @@ struct GameObject {
     Transform* const _transform;
 
     // Constructor-based initialization
-    GameObject(const std::string tag, const std::string meshTag, const std::string shaderTag, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale)
+    GameObject(const std::string tag, const std::string meshTag, const std::string shaderTag, const std::vector<std::string> textureTags, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale)
         : _meshTag(meshTag),
         _shaderTag(shaderTag),
+        _textureTags(textureTags),
         // initialize _transform with the value returned from TransformManager creating a new transform
         _transform(TransformManager::getInstance().addTransform(tag, pos, rot, scale))
     {

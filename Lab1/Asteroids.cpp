@@ -38,12 +38,12 @@ void Asteroids::loadPhysicsEngine()
 
 void Asteroids::loadMeshes()
 {
-	MeshManager::getInstance().loadMesh("PlayerShip", "..\\res\\ship.obj");
+	MeshManager::getInstance().loadMesh("PlayerShip", "../res/asteroid1.obj");
 }
 
 void Asteroids::loadShaders()
 {
-	ShaderManager::getInstance().loadShader("ADS", "..\\res\\ADS.vert", "..\\res\\ADS.frag");
+	ShaderManager::getInstance().loadShader("ADS", "../res/ADS.vert", "../res/ADS.frag");
 
 	// Bind UBO to Shader
 	UBOManager::getInstance().bindUBOToShader("Matrices", ShaderManager::getInstance().getShader("ADS")->ID(), "Matrices");
@@ -51,8 +51,8 @@ void Asteroids::loadShaders()
 
 void Asteroids::loadTextures()
 {
-	TextureManager::getInstance().loadTexture("Water", "..\\res\\water.jpg");
-	TextureManager::getInstance().loadTexture("Bricks", "..\\res\\bricks.jpg");
+	TextureManager::getInstance().loadTexture("RockColour", "../res/textures/RockColour.png");
+	TextureManager::getInstance().loadTexture("RockNormal", "../res/textures/RockNormal.png");
 }
 
 void Asteroids::initPlayer()
@@ -61,9 +61,10 @@ void Asteroids::initPlayer()
 		"Player",
 		"PlayerShip",
 		"ADS",
+		std::vector<std::string>{"RockColour", "RockNormal"},
 		glm::vec3(0, 0, 0),
 		glm::vec3(0, 0, 0),
-		glm::vec3(0.5, 0.5, 0.5)
+		glm::vec3(2, 2, 2)
 	);
 
 	_playerTransform = _player->_transform;

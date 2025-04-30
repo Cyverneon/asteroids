@@ -118,6 +118,7 @@
 
 #if defined(_MSC_VER) && _MSC_VER >= 0x1400
 #define _CRT_SECURE_NO_WARNINGS // suppress bogus warnings about fopen()
+#define STBI_FAILURE_USERMSG
 #endif
 
 #include <stdio.h>
