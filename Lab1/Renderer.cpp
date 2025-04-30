@@ -41,7 +41,8 @@ void Renderer::renderGameObjects()
 {
 	for (auto& obj : GameObjectManager::getInstance().getGameObjects())
 	{
-		//std::shared_ptr<GameObject> obj = gameObjectPair.second;
+		// obj.first is the tag
+		// obj.second is the pointer to the actual GameObject
 
 		// don't bother rebinding shader if it's the same
 		if (obj.second->_shaderTag != _activeShaderTag)
