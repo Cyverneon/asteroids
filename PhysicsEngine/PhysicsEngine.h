@@ -7,7 +7,7 @@
 #endif
 
 #include "GameObject.h"
-#include "TransformManager.h"
+#include "Transform.h"
 #include <glm/glm.hpp>
 
 // Function to set the forward direction of an object

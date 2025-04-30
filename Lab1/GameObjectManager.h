@@ -10,7 +10,13 @@ class GameObjectManager
 public:
 	static GameObjectManager& getInstance();
 
-	std::shared_ptr<GameObject> createGameObject(const std::string& tag, const std::string meshTag, const std::string shaderTag);
+	std::shared_ptr<GameObject> createGameObject(
+		const std::string& tag,
+		const std::string meshTag,
+		const std::string shaderTag,
+		glm::vec3 pos = glm::vec3(0, 0, 0),
+		glm::vec3 rot = glm::vec3(0, 0, 0),
+		glm::vec3 scale = glm::vec3(1, 1, 1));
 	std::shared_ptr<GameObject> getGameObject(const std::string& tag);
 
 	std::unordered_map<std::string, std::shared_ptr<GameObject>> getGameObjects() { return _gameObjects; }
