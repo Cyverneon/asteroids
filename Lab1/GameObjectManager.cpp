@@ -14,7 +14,6 @@ std::shared_ptr<GameObject> GameObjectManager::createGameObject(
     glm::vec3 rot,
     glm::vec3 scale)
 {
-    std::cout << pos.x << ", " << pos.y << ", " << pos.z << std::endl;
     if (_gameObjects.find(tag) != _gameObjects.end())
     {
         std::cerr << "GameObject already exists with tag: " << tag << std::endl;
