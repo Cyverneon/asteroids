@@ -11,7 +11,7 @@ extern "C" PHYSICS_API void applyThrust(GameObject* obj, float thrustAmount)
     obj->velocity += obj->forwardDirection * thrustAmount;
 }
 
-extern "C" PHYSICS_API void updatePhysics(GameObject * obj, float deltaTime)
+extern "C" PHYSICS_API void updatePhysics(GameObject* obj, float deltaTime)
 {
     float dragFactor = 2.0f;
     obj->velocity -= (obj->velocity*dragFactor)*deltaTime;

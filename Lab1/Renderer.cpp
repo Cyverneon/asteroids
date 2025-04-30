@@ -39,16 +39,16 @@ void Renderer::clearScreenBuffer()
 
 void Renderer::renderGameObjects()
 {
-	for (auto& gameObjectPair : GameObjectManager::getInstance().getGameObjects())
+	for (auto& obj : GameObjectManager::getInstance().getGameObjects())
 	{
-		std::shared_ptr<GameObject> obj = gameObjectPair.second;
+		//std::shared_ptr<GameObject> obj = gameObjectPair.second;
 
 		// don't bother rebinding shader if it's the same
-		if (obj->_shaderTag != _activeShaderTag)
-			setActiveShader(obj->_shaderTag);
+		if (obj.second->_shaderTag != _activeShaderTag)
+			setActiveShader(obj.second->_shaderTag);
 
 		// Update UBO for this object's transform
-		glm::mat4 model = obj->_transform->GetModel();
+		glm::mat4 model = obj.second->_transform->GetModel();
 		glm::mat4 view = _camera->getView();
 		glm::mat4 projection = _camera->getProjection();
 
@@ -56,7 +56,7 @@ void Renderer::renderGameObjects()
 		UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4), glm::value_ptr(view), sizeof(glm::mat4));
 		UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4) * 2, glm::value_ptr(projection), sizeof(glm::mat4));
 
-		MeshManager::getInstance().getMesh(obj->_meshTag)->draw();
+		MeshManager::getInstance().getMesh(obj.second->_meshTag)->draw();
 	}
 }
 

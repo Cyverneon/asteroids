@@ -6,12 +6,13 @@ TransformManager& TransformManager::getInstance() {
     return instance;
 }
 
-void TransformManager::addTransform(const std::string& tag, const Transform& transform) {
+Transform* TransformManager::addTransform(const std::string& tag, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale) {
     if (transforms.find(tag) != transforms.end()) {
         std::cerr << "Transform already exists for tag: " << tag << std::endl;
-        return;
+        return nullptr;
     }
-    transforms[tag] = transform;
+    transforms[tag] = Transform(pos, rot, scale);
+    return &transforms[tag];
 }
 
 Transform& TransformManager::getTransform(const std::string& tag) {
@@ -24,14 +25,6 @@ Transform& TransformManager::getTransform(const std::string& tag) {
 
 bool TransformManager::hasTransform(const std::string& tag) {
     return transforms.find(tag) != transforms.end();
-}
-
-void TransformManager::updateTransform(const std::string& tag, const Transform& transform) {
-    if (transforms.find(tag) == transforms.end()) {
-        std::cerr << "Warning: Trying to update a non-existent transform: " << tag << std::endl;
-        return;
-    }
-    transforms[tag] = transform;
 }
 
 void TransformManager::removeTransform(const std::string& tag) {

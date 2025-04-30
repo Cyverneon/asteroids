@@ -9,10 +9,9 @@ class TransformManager {
 public:
     static TransformManager& getInstance();  // Singleton instance
 
-    void addTransform(const std::string& tag, const Transform& transform);
+    Transform* addTransform(const std::string& tag, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale);
     Transform& getTransform(const std::string& tag);
     bool hasTransform(const std::string& tag);
-    void updateTransform(const std::string& tag, const Transform& transform);
     void removeTransform(const std::string& tag);
 
     void clear();  // Clears all stored transforms

@@ -14,6 +14,7 @@ public:
 	void initPlayer();
 
 	//run
+	void createAsteroids();
 	void movePlayer(float delta);
 
 	// override functions
@@ -25,6 +26,7 @@ public:
 
 private:
 	std::shared_ptr<GameObject> _player;
+	Transform* _playerTransform = nullptr;
 
 	// units per second
 	float _playerSpeed = 50.0f;
@@ -36,6 +38,6 @@ private:
 	void (*applyThrust)(GameObject*, float) = nullptr;
 	void (*updatePhysics)(GameObject*, float) = nullptr;
 	bool (*checkCollisionRadius)(const GameObject*, const GameObject*, float, float) = nullptr;
-	bool (*checkCollisionAABB)(const GameObject*, const GameObject*, const glm::vec3&, const glm::vec3&);
+	bool (*checkCollisionAABB)(const GameObject*, const GameObject*, const glm::vec3&, const glm::vec3&) = nullptr;
 };
 

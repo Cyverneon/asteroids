@@ -57,22 +57,24 @@ void Asteroids::loadTextures()
 
 void Asteroids::initPlayer()
 {
-	TransformManager::getInstance().addTransform("player", Transform(glm::vec3(0, 0, 0),
-		glm::vec3(0, 0, 0),
-		glm::vec3(1, 1, 1)));
-
 	_player = GameObjectManager::getInstance().createGameObject(
 		"Player",
-		&TransformManager::getInstance().getTransform("player"),
 		"PlayerShip",
 		"ADS");
+
+	_playerTransform = _player->_transform;
+
+	_playerTransform->scale = glm::vec3(0.5f, 0.5f, 0.5f);
+}
+
+void Asteroids::createAsteroids()
+{
+
 }
 
 void Asteroids::movePlayer(float delta)
 {
 	if (!_player) return;
-
-	Transform& playerTransform = *(_player->_transform);
 
 	const Uint8* kbState = SDL_GetKeyboardState(NULL);
 	
@@ -81,13 +83,13 @@ void Asteroids::movePlayer(float delta)
 		applyThrust(_player.get(), _playerSpeed * delta);
 	}
 
-	 //backwards movement was disabled because it doesn't really make sense for the ship's thrusters to be able to reverse
-	 //and isn't possible in the actual asteroids game
-	 //left it here so it can be re-enabled if wanted
-	if (kbState[SDL_SCANCODE_S])
-	{
-		applyThrust(_player.get(), -_playerSpeed * delta);
-	}
+	// backwards movement was disabled because it doesn't really make sense for the ship's thrusters to be able to reverse
+	// and isn't possible in actual asteroids
+	// left it here so it can be re-enabled if wanted
+	//if (kbState[SDL_SCANCODE_S])
+	//{
+	//	applyThrust(_player.get(), -_playerSpeed * delta);
+	//}
 
 	// increase and decrease Y rotation
 	// calculate new forward direction from 
@@ -96,8 +98,8 @@ void Asteroids::movePlayer(float delta)
 	//forward.z = cos(pitch) * cos(yaw);
 	if (kbState[SDL_SCANCODE_A])
 	{
-		glm::vec3 newRotation = glm::vec3(0.0f, playerTransform.rot.y + glm::radians(_playerRotSpeed * delta), 0.0f);
-		playerTransform.rot = newRotation;
+		glm::vec3 newRotation = glm::vec3(0.0f, _playerTransform->rot.y + glm::radians(_playerRotSpeed * delta), 0.0f);
+		_playerTransform->rot = newRotation;
 		setForwardDirection(_player.get(), glm::vec3(
 			(cos(newRotation.x) * sin(newRotation.y)),
 			-sin(newRotation.x),
@@ -105,15 +107,15 @@ void Asteroids::movePlayer(float delta)
 	}
 	if (kbState[SDL_SCANCODE_D])
 	{
-		glm::vec3 newRotation = glm::vec3(0.0f, playerTransform.rot.y - glm::radians(_playerRotSpeed * delta), 0.0f);
-		playerTransform.rot = newRotation;
+		glm::vec3 newRotation = glm::vec3(0.0f, _playerTransform->rot.y - glm::radians(_playerRotSpeed * delta), 0.0f);
+		_playerTransform->rot = newRotation;
 		setForwardDirection(_player.get(), glm::vec3(
 			(cos(newRotation.x) * sin(newRotation.y)),
 			-sin(newRotation.x),
 			(cos(newRotation.x) * cos(newRotation.y))));
 	}
 
-	playerTransform.pos += _player->velocity * delta;
+	_playerTransform->pos += _player->velocity * delta;
 
 	//float minX = -12.0;
 	//float maxX = 12.0;
