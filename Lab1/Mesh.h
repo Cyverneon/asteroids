@@ -24,6 +24,9 @@ private:
 	glm::vec3 pos;
 	glm::vec2 texCoord;
 	glm::vec3 normal;
+
+	glm::vec3 tangent;
+	glm::vec3 bitantent;
 };
 
 class Mesh {
@@ -33,8 +36,8 @@ public:
 
 	void draw();
 	void init(Vertex* vertices, unsigned int numVertices, unsigned int* indices, unsigned int numIndices);
-	void loadModel(const std::string& filename);
 	void initModel(const IndexedModel& model);
+	void loadModel(const std::string& filename);
 
 private:
 	GLuint vao = 0;  // Vertex Array Object

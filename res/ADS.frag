@@ -1,22 +1,28 @@
 #version 400 core
 
+in vec3 fragPosition;
 in vec2 fragTexcoord;
 in vec3 fragNormal;
-in vec3 fragPosition;
+in mat3 fragTBN;
 
 out vec4 FragColor;
 
 uniform sampler2D textureSampler;
+uniform sampler2D normalSampler;
 
 // Hardcoded Light Properties
 const vec3 lightPos = vec3(2.0, 4.0, 2.0);
 const vec3 lightColor = vec3(1.0, 1.0, 1.0);
 const vec3 ambientColor = vec3(0.2, 0.2, 0.2);
-const float shininess = 32.0;
+const float shininess = 1.0;
 
 void main() {
+    vec3 normal = texture(normalSampler, fragTexcoord).rgb;
+    normal = normal * 2.0 - 1.0;
+    normal = normalize(fragTBN * normal);
+
     // Normalise Vectors
-    vec3 norm = normalize(fragNormal);
+    vec3 norm = normal;
     vec3 lightDir = normalize(lightPos - fragPosition);
     
     // Ambient Light

@@ -184,11 +184,5 @@
     <None Include="..\res\ADS.vert">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="..\res\PBR.frag">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\res\PBR.vert">
-      <Filter>Resource Files</Filter>
-    </None>
   </ItemGroup>
 </Project>
