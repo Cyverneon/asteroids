@@ -1,27 +1,27 @@
-#include "Asteroids.h"
+#include "GameLogic.h"
 
-Asteroids::Asteroids()
+GameLogic::GameLogic()
 {
 
 }
 
-Asteroids::~Asteroids()
+GameLogic::~GameLogic()
 {
 
 }
 
-void Asteroids::initialiseGame()
+void GameLogic::initialiseGame()
 {
 	loadPhysicsEngine();
 	initPlayer();
 }
 
-void Asteroids::updateGame(float delta)
+void GameLogic::updateGame(float delta)
 {
 	movePlayer(delta);
 }
 
-void Asteroids::loadPhysicsEngine()
+void GameLogic::loadPhysicsEngine()
 {
 	if (!DLLManager::getInstance().loadDLL("PhysicsEngine.dll"))
 	{
@@ -36,12 +36,12 @@ void Asteroids::loadPhysicsEngine()
 	checkCollisionAABB = DLLManager::getInstance().getFunction<bool(*)(const GameObject*, const GameObject*, const glm::vec3&, const glm::vec3&)>("PhysicsEngine.dll", "checkCollisionAABB");
 }
 
-void Asteroids::loadMeshes()
+void GameLogic::loadMeshes()
 {
 	MeshManager::getInstance().loadMesh("PlayerShip", "../res/asteroid1.obj");
 }
 
-void Asteroids::loadShaders()
+void GameLogic::loadShaders()
 {
 	ShaderManager::getInstance().loadShader("ADS", "../res/ADS.vert", "../res/ADS.frag");
 
@@ -49,13 +49,13 @@ void Asteroids::loadShaders()
 	UBOManager::getInstance().bindUBOToShader("Matrices", ShaderManager::getInstance().getShader("ADS")->ID(), "Matrices");
 }
 
-void Asteroids::loadTextures()
+void GameLogic::loadTextures()
 {
 	TextureManager::getInstance().loadTexture("RockColour", "../res/textures/RockColour.png");
 	TextureManager::getInstance().loadTexture("RockNormal", "../res/textures/RockNormal.png");
 }
 
-void Asteroids::initPlayer()
+void GameLogic::initPlayer()
 {
 	_player = GameObjectManager::getInstance().createGameObject(
 		"Player",
@@ -64,23 +64,23 @@ void Asteroids::initPlayer()
 		std::vector<std::string>{"RockColour", "RockNormal"},
 		glm::vec3(0, 0, 0),
 		glm::vec3(0, 0, 0),
-		glm::vec3(2, 2, 2)
+		glm::vec3(1, 1, 1)
 	);
 
 	_playerTransform = _player->_transform;
 }
 
-void Asteroids::createAsteroids()
+void GameLogic::createAsteroids()
 {
 
 }
 
-void Asteroids::movePlayer(float delta)
+void GameLogic::movePlayer(float delta)
 {
 	if (!_player) return;
 
 	const Uint8* kbState = SDL_GetKeyboardState(NULL);
-	
+
 	if (kbState[SDL_SCANCODE_W])
 	{
 		applyThrust(_player.get(), _playerSpeed * delta);

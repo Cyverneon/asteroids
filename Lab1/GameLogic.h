@@ -1,13 +1,19 @@
 #pragma once
-#include "Game.h"
+#include "GameObject.h"
+#include "GameObjectManager.h"
+#include "UBOManager.h"
+#include "DLLManager.h"
+#include "MeshManager.h"
+#include "TextureManager.h"
+#include "ShaderManager.h"
 #include "Mesh.h"
 #include "Texture.h"
 
-class Asteroids : public Game
+class GameLogic
 {
-public: 
-	Asteroids();
-	~Asteroids();
+public:
+	GameLogic();
+	~GameLogic();
 
 	//initialise
 	void loadPhysicsEngine();
@@ -17,12 +23,11 @@ public:
 	void createAsteroids();
 	void movePlayer(float delta);
 
-	// override functions
-	void loadMeshes() override;
-	void loadShaders() override;
-	void loadTextures() override;
-	void initialiseGame() override;
-	void updateGame(float delta) override;
+	void loadMeshes();
+	void loadShaders();
+	void loadTextures();
+	void initialiseGame();
+	void updateGame(float delta);
 
 private:
 	std::shared_ptr<GameObject> _player;

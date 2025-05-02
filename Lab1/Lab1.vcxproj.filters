@@ -43,12 +43,6 @@
     <Filter Include="Header Files\Rendering\Management">
       <UniqueIdentifier>{e02e4973-b9b6-4572-8f50-f9ca0945c746}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Game\Asteroids">
-      <UniqueIdentifier>{a9c3c80b-fabf-4d09-9b34-c242a06ab5dd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game\Asteroids">
-      <UniqueIdentifier>{f8b09695-b299-4bd1-b0fb-96ae63c71b52}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DisplayFacade.cpp">
@@ -93,9 +87,6 @@
     <ClCompile Include="DLLManager.cpp">
       <Filter>Source Files\Rendering\Management</Filter>
     </ClCompile>
-    <ClCompile Include="Asteroids.cpp">
-      <Filter>Source Files\Game\Asteroids</Filter>
-    </ClCompile>
     <ClCompile Include="MeshManager.cpp">
       <Filter>Source Files\Rendering\Management</Filter>
     </ClCompile>
@@ -106,6 +97,9 @@
       <Filter>Source Files\Rendering\Management</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="GameLogic.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
   </ItemGroup>
@@ -158,14 +152,8 @@
     <ClInclude Include="transform.h">
       <Filter>Header Files\Rendering\Management</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Header Files\Game</Filter>
-    </ClInclude>
     <ClInclude Include="MeshManager.h">
       <Filter>Header Files\Rendering\Management</Filter>
-    </ClInclude>
-    <ClInclude Include="Asteroids.h">
-      <Filter>Header Files\Game\Asteroids</Filter>
     </ClInclude>
     <ClInclude Include="TextureManager.h">
       <Filter>Header Files\Rendering\Management</Filter>
@@ -174,6 +162,9 @@
       <Filter>Header Files\Rendering\Management</Filter>
     </ClInclude>
     <ClInclude Include="Renderer.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="GameLogic.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
   </ItemGroup>

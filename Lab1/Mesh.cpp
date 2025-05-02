@@ -41,12 +41,14 @@ void Mesh::initModel(const IndexedModel& model) {
 
     // Create Interleaved Data
     std::vector<float> interleavedData;
-    for (size_t i = 0; i < model.positions.size()-3; i+=3) {
 
-        glm::vec3 edge1 = model.positions[i + 1] - model.positions[i];
-        glm::vec3 edge2 = model.positions[i + 2] - model.positions[i];
-        glm::vec2 deltaUV1 = model.texCoords[i + 1] - model.texCoords[i];
-        glm::vec2 deltaUV2 = model.texCoords[i + 2] - model.texCoords[i];
+    std::cout << model.positions.size() % 3 << std::endl;
+
+    for (size_t i = 0; i < model.positions.size()-2; i+=3) {
+        glm::vec3 edge1 = model.positions[i+1] - model.positions[i];
+        glm::vec3 edge2 = model.positions[i+2] - model.positions[i];
+        glm::vec2 deltaUV1 = model.texCoords[i+1] - model.texCoords[i];
+        glm::vec2 deltaUV2 = model.texCoords[i+2] - model.texCoords[i];
 
         float f = 1.0f / ((deltaUV1.x * deltaUV2.y) - (deltaUV2.x * deltaUV1.y));
 

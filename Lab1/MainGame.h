@@ -2,9 +2,8 @@
 #include <iostream>
 #include <vector>
 #include <windows.h>  // Required for LoadLibrary & GetProcAddress
-#include "Game.h"
 #include "Renderer.h"
-#include "Asteroids.h"
+#include "GameLogic.h"
 #include "Camera.h"
 
 enum class GameState{PLAY, EXIT};
@@ -33,7 +32,7 @@ private:
 	float _lastFrameTime = 0.0f;
 	float _fixedTimeStep = 0.0f;
 
-	Asteroids _game;
+	GameLogic _game;
 	Renderer _renderer;
 };
 
