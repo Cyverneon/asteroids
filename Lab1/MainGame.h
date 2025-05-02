@@ -17,6 +17,9 @@ public:
 	void run();
 
 private:
+	void loadMeshes();
+	void loadShaders();
+	void loadTextures();
 	void initSystems();
 	void processInput();
 	void gameLoop();

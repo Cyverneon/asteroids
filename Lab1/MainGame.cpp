@@ -17,13 +17,32 @@ void MainGame::run()
 	gameLoop();
 }
 
+void MainGame::loadMeshes()
+{
+	MeshManager::getInstance().loadMesh("PlayerShip", "../res/asteroid1.obj");
+}
+
+void MainGame::loadShaders()
+{
+	ShaderManager::getInstance().loadShader("ADS", "../res/ADS.vert", "../res/ADS.frag");
+
+	// Bind UBO to Shader
+	UBOManager::getInstance().bindUBOToShader("Matrices", ShaderManager::getInstance().getShader("ADS")->ID(), "Matrices");
+}
+
+void MainGame::loadTextures()
+{
+	TextureManager::getInstance().loadTexture("RockColour", "../res/textures/RockColour.png");
+	TextureManager::getInstance().loadTexture("RockNormal", "../res/textures/RockNormal.png");
+}
+
 void MainGame::initSystems()
 {
 	_renderer.setupUBOs();
 	_renderer.init(&_gameDisplay, &_camera);
-	_game.loadShaders();
-	_game.loadMeshes();
-	_game.loadTextures();
+	loadShaders();
+	loadMeshes();
+	loadTextures();
 	_game.initialiseGame();
 	setupCamera();
 

@@ -36,25 +36,6 @@ void GameLogic::loadPhysicsEngine()
 	checkCollisionAABB = DLLManager::getInstance().getFunction<bool(*)(const GameObject*, const GameObject*, const glm::vec3&, const glm::vec3&)>("PhysicsEngine.dll", "checkCollisionAABB");
 }
 
-void GameLogic::loadMeshes()
-{
-	MeshManager::getInstance().loadMesh("PlayerShip", "../res/asteroid1.obj");
-}
-
-void GameLogic::loadShaders()
-{
-	ShaderManager::getInstance().loadShader("ADS", "../res/ADS.vert", "../res/ADS.frag");
-
-	// Bind UBO to Shader
-	UBOManager::getInstance().bindUBOToShader("Matrices", ShaderManager::getInstance().getShader("ADS")->ID(), "Matrices");
-}
-
-void GameLogic::loadTextures()
-{
-	TextureManager::getInstance().loadTexture("RockColour", "../res/textures/RockColour.png");
-	TextureManager::getInstance().loadTexture("RockNormal", "../res/textures/RockNormal.png");
-}
-
 void GameLogic::initPlayer()
 {
 	_player = GameObjectManager::getInstance().createGameObject(

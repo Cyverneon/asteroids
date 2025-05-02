@@ -23,9 +23,6 @@ public:
 	void createAsteroids();
 	void movePlayer(float delta);
 
-	void loadMeshes();
-	void loadShaders();
-	void loadTextures();
 	void initialiseGame();
 	void updateGame(float delta);
 
