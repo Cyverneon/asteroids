@@ -12,21 +12,22 @@ layout(std140) uniform Matrices {
     mat4 projection;
 };
 
-out vec3 fragPosition;
-out vec2 fragTexcoord;
-out vec3 fragNormal;
-out mat3 fragTBN;
+out VS_OUT
+{
+    vec3 position;
+    vec2 texcoord;
+    mat3 TBN;
+} vs_out;
+
 
 void main() {
     vec4 worldPosition = model * vec4(position, 1.0);
     gl_Position = projection * view * worldPosition;
-    fragTexcoord = texcoord;
-    fragPosition = worldPosition.xyz;
-
-    fragNormal = normalize(mat3(transpose(inverse(model))) * normal);
+    vs_out.texcoord = texcoord;
+    vs_out.position = worldPosition.xyz;
 
     vec3 T = normalize(vec3(model * vec4(tangent, 0.0)));
     vec3 B = normalize(vec3(model * vec4(bitangent, 0.0)));
     vec3 N = normalize(vec3(model * vec4(normal, 0.0)));
-    fragTBN = mat3(T, B, N);
+    vs_out.TBN = mat3(T, B, N);
 }
