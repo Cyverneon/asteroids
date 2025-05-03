@@ -8,6 +8,7 @@
 #include "ShaderManager.h"
 #include "Mesh.h"
 #include "Texture.h"
+#include "Camera.h"
 
 class GameLogic
 {
@@ -15,6 +16,13 @@ public:
 	GameLogic();
 	~GameLogic();
 
+	void initialiseGame();
+	void initCamera(float width, float height);
+	void updateGame(float delta);
+
+	Camera _camera;
+
+private:
 	//initialise
 	void loadPhysicsEngine();
 	void initPlayer();
@@ -23,10 +31,6 @@ public:
 	void createAsteroids();
 	void movePlayer(float delta);
 
-	void initialiseGame();
-	void updateGame(float delta);
-
-private:
 	std::shared_ptr<GameObject> _player;
 	Transform* _playerTransform = nullptr;
 

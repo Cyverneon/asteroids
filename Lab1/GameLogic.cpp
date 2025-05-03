@@ -36,6 +36,11 @@ void GameLogic::loadPhysicsEngine()
 	checkCollisionAABB = DLLManager::getInstance().getFunction<bool(*)(const GameObject*, const GameObject*, const glm::vec3&, const glm::vec3&)>("PhysicsEngine.dll", "checkCollisionAABB");
 }
 
+void GameLogic::initCamera(float width, float height)
+{
+	_camera.initCamera(glm::vec3(0, 15, 0), 70.0f, width / height, 0.01f, 1000.0f);
+}
+
 void GameLogic::initPlayer()
 {
 	_player = GameObjectManager::getInstance().createGameObject(

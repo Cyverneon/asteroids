@@ -24,11 +24,9 @@ private:
 	void processInput();
 	void gameLoop();
 	void calculateDeltaTime();
-	void setupCamera();
 
 	DisplayFacade _gameDisplay;
 	GameState _gameState;
-	Camera _camera;
 
 	float _deltaTime = 0.0f;
 	float _lastFrameTime = 0.0f;

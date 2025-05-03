@@ -41,18 +41,12 @@ void MainGame::loadTextures()
 void MainGame::initSystems()
 {
 	_renderer.setupUBOs();
-	_renderer.init(&_gameDisplay, &_camera);
+	_renderer.init(&_gameDisplay, &_game._camera);
 	loadShaders();
 	loadMeshes();
 	loadTextures();
 	_game.initialiseGame();
-	setupCamera();
-
-	glm::vec3 test = glm::unProject(glm::vec3(0, 0, 1), glm::mat4(1.0f), _camera.getProjection(), glm::vec4(0, 0, _gameDisplay.getWidth(), _gameDisplay.getHeight()));
-	std::cout << test.x << ", " << test.y << ", " << test.z << std::endl;
-
-	test = glm::unProject(glm::vec3(1920, 1080, 1), glm::mat4(1.0f), _camera.getProjection(), glm::vec4(0, 0, _gameDisplay.getWidth(), _gameDisplay.getHeight()));
-	std::cout << test.x << ", " << test.y << ", " << test.z << std::endl;
+	_game.initCamera(_gameDisplay.getWidth(), _gameDisplay.getHeight());
 }
 
 void MainGame::calculateDeltaTime()
@@ -60,12 +54,6 @@ void MainGame::calculateDeltaTime()
 	float currentFrameTime = SDL_GetTicks() / 1000.0f; // divide by 1000 to convert from milliseconds to seconds
 	_deltaTime = currentFrameTime - _lastFrameTime;
 	_lastFrameTime = currentFrameTime;
-}
-
-void MainGame::setupCamera()
-{
-	_camera.initCamera(glm::vec3(0, 15, 0), 70.0f,
-		(float)_gameDisplay.getWidth() / _gameDisplay.getHeight(), 0.01f, 1000.0f);
 }
 
 void MainGame::gameLoop()
