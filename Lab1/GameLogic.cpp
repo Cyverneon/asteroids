@@ -101,26 +101,26 @@ void GameLogic::movePlayer(float delta)
 
 	_playerTransform->pos += _player->velocity * delta;
 
-	//float minX = -12.0;
-	//float maxX = 12.0;
-	//float minY = -7.0;
-	//float maxY = 7.0;
+	float minX = -12.0;
+	float maxX = 12.0;
+	float minY = -7.0;
+	float maxY = 7.0;
 
-	//if (playerTransform.pos.x > maxX)
-	//{
-	//	playerTransform.pos.x = minX;
-	//}
-	//else if (playerTransform.pos.x < minX)
-	//{
-	//	playerTransform.pos.x = maxX;
-	//}
-	//if (playerTransform.pos.z > maxY)
-	//{
-	//	playerTransform.pos.z = minY;
-	//}
-	//else if (playerTransform.pos.z < minY)
-	//{
-	//	playerTransform.pos.z = maxY;
-	//}
+	if (_playerTransform->pos.x > maxX)
+	{
+		_playerTransform->pos.x = minX;
+	}
+	else if (_playerTransform->pos.x < minX)
+	{
+		_playerTransform->pos.x = maxX;
+	}
+	if (_playerTransform->pos.z > maxY)
+	{
+		_playerTransform->pos.z = minY;
+	}
+	else if (_playerTransform->pos.z < minY)
+	{
+		_playerTransform->pos.z = maxY;
+	}
 	updatePhysics(_player.get(), delta);
 }
