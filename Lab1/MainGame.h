@@ -25,7 +25,6 @@ private:
 	void gameLoop();
 	void calculateDeltaTime();
 	void setupCamera();
-	float getRefreshRate();
 
 	DisplayFacade _gameDisplay;
 	GameState _gameState;
@@ -33,7 +32,6 @@ private:
 
 	float _deltaTime = 0.0f;
 	float _lastFrameTime = 0.0f;
-	float _fixedTimeStep = 0.0f;
 
 	GameLogic _game;
 	Renderer _renderer;

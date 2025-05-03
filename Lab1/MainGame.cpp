@@ -4,7 +4,6 @@ MainGame::MainGame()
 	: _gameDisplay("OpenGL Game", 1920, 1080), // Initialize the display wrapper
 	_gameState(GameState::PLAY)
 {
-	_fixedTimeStep = 1.0f / getRefreshRate(); // Dynamically set refresh-based time step
 }
 
 MainGame::~MainGame()
@@ -24,9 +23,8 @@ void MainGame::loadMeshes()
 
 void MainGame::loadShaders()
 {
-	ShaderManager::getInstance().loadShader("ADS", "../res/ADS.vert", "../res/ADS.frag");
+	ShaderManager::getInstance().loadShader("ADS", "../res/shaders/shader.vert", "../res/shaders/shader.frag");
 
-	// Bind UBO to Shader
 	UBOManager::getInstance().bindUBOToShader("Matrices", ShaderManager::getInstance().getShader("ADS")->ID(), "Matrices");
 }
 
