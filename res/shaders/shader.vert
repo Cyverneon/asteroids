@@ -19,9 +19,9 @@ out VS_OUT
     mat3 TBN;
 } vs_out;
 
-
 void main() {
     vec4 worldPosition = model * vec4(position, 1.0);
+    worldPosition.x = mod(worldPosition.x, 24.0) - 12.0;
     gl_Position = projection * view * worldPosition;
     vs_out.texcoord = texcoord;
     vs_out.position = worldPosition.xyz;
