@@ -23,9 +23,9 @@ void MainGame::loadMeshes()
 
 void MainGame::loadShaders()
 {
-	ShaderManager::getInstance().loadShader("ADS", "../res/shaders/shader.vert", "../res/shaders/shader.frag");
+	ShaderManager::getInstance().loadShader("DefaultShader", "../res/shaders/shader.vert", "../res/shaders/shader.frag");
 
-	UBOManager::getInstance().bindUBOToShader("Matrices", ShaderManager::getInstance().getShader("ADS")->ID(), "Matrices");
+	UBOManager::getInstance().bindUBOToShader("Matrices", ShaderManager::getInstance().getShader("DefaultShader")->ID(), "Matrices");
 }
 
 void MainGame::loadTextures()
@@ -49,19 +49,6 @@ void MainGame::initSystems()
 
 	test = glm::unProject(glm::vec3(1920, 1080, 1), glm::mat4(1.0f), _camera.getProjection(), glm::vec4(0, 0, _gameDisplay.getWidth(), _gameDisplay.getHeight()));
 	std::cout << test.x << ", " << test.y << ", " << test.z << std::endl;
-}
-
-float MainGame::getRefreshRate()
-{
-	SDL_DisplayMode mode;
-	if (SDL_GetCurrentDisplayMode(0, &mode) == 0 && mode.refresh_rate > 0)
-	{
-		float rate = static_cast<float>(mode.refresh_rate);
-		std::cout << "[DEBUG] Detected Refresh Rate: " << rate << " Hz" << std::endl;
-		return rate;
-	}
-	std::cout << "[DEBUG] Could not detect refresh rate. Defaulting to 60 Hz." << std::endl;
-	return 60.0f; // Fallback if query fails or returns 0
 }
 
 void MainGame::calculateDeltaTime()

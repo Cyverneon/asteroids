@@ -41,7 +41,7 @@ void GameLogic::initPlayer()
 	_player = GameObjectManager::getInstance().createGameObject(
 		"Player",
 		"PlayerShip",
-		"ADS",
+		"DefaultShader",
 		std::vector<std::string>{"RockColour", "RockNormal"},
 		glm::vec3(0, 0, 0),
 		glm::vec3(0, 0, 0),
