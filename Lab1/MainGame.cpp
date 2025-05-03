@@ -26,6 +26,10 @@ void MainGame::loadShaders()
 	ShaderManager::getInstance().loadShader("DefaultShader", "../res/shaders/shader.vert", "../res/shaders/shader.frag");
 
 	UBOManager::getInstance().bindUBOToShader("Matrices", ShaderManager::getInstance().getShader("DefaultShader")->ID(), "Matrices");
+
+	ShaderManager::getInstance().getShader("DefaultShader")->Bind();
+	ShaderManager::getInstance().getShader("DefaultShader")->setInt("colourSampler", 0);
+	ShaderManager::getInstance().getShader("DefaultShader")->setInt("normalSampler", 1);
 }
 
 void MainGame::loadTextures()
