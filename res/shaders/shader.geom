@@ -1,7 +1,7 @@
 #version 400 core
 
 layout (triangles) in;
-layout (triangle_strip, max_vertices = 3) out;
+layout (triangle_strip, max_vertices = 6) out;
 
 in VS_OUT
 {
@@ -17,6 +17,12 @@ out VS_OUT
     mat3 TBN;
 } gs_out;
 
+layout(std140) uniform Matrices {
+    mat4 model;
+    mat4 view;
+    mat4 projection;
+};
+
 void main()
 {
     for (int i = 0; i < 3; i++)
@@ -25,10 +31,27 @@ void main()
         gs_out.texcoord = gs_in[i].texcoord;
         gs_out.TBN = gs_in[i].TBN;
 
-        gl_Position = gl_in[i].gl_Position;
+        vec4 worldPosition = vec4(gs_in[i].position, 1.0);
+        gl_Position = projection * view * worldPosition;
 
         EmitVertex();
     }
+
+    EndPrimitive();
+
+    for (int i = 0; i < 3; i++)
+    {
+        vec3 pos = gs_in[i].position + vec3(24.5, 0.0, 0.0);
+
+        vec4 worldPosition = vec4(pos, 1.0);
+        gl_Position = projection * view * worldPosition;
+
+        gs_out.position = pos;
+        gs_out.texcoord = gs_in[i].texcoord;
+        gs_out.TBN = gs_in[i].TBN;
+        EmitVertex();
+    }
+
 
     EndPrimitive();
 }
