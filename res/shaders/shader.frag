@@ -33,11 +33,6 @@ const float shininess = 1.0;
 
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 
-const float minX = -12.0;
-const float maxX = 12.0;
-const float minY = -7.0;
-const float maxY = 7.0;
-
 void main() {
     vec3 normal = texture(normalSampler, fs_in.texcoord).rgb;
     normal = normal * 2.0 - 1.0;

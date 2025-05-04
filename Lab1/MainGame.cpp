@@ -23,13 +23,19 @@ void MainGame::loadMeshes()
 
 void MainGame::loadShaders()
 {
-	ShaderManager::getInstance().loadShader("DefaultShader", true, "../res/shaders/shader.vert", "../res/shaders/shader.frag", "../res/shaders/shader.geom");
+	ShaderManager::getInstance().loadShader("ScreenWrap", true, "../res/shaders/shader.vert", "../res/shaders/shader.frag", "../res/shaders/shader.geom");
+	UBOManager::getInstance().bindUBOToShader("Matrices", ShaderManager::getInstance().getShader("ScreenWrap")->ID(), "Matrices");
+	ShaderManager::getInstance().getShader("ScreenWrap")->Bind();
+	ShaderManager::getInstance().getShader("ScreenWrap")->setInt("colourSampler", 0);
+	ShaderManager::getInstance().getShader("ScreenWrap")->setInt("normalSampler", 1);
 
-	UBOManager::getInstance().bindUBOToShader("Matrices", ShaderManager::getInstance().getShader("DefaultShader")->ID(), "Matrices");
-
-	ShaderManager::getInstance().getShader("DefaultShader")->Bind();
-	ShaderManager::getInstance().getShader("DefaultShader")->setInt("colourSampler", 0);
-	ShaderManager::getInstance().getShader("DefaultShader")->setInt("normalSampler", 1);
+	// screen wrapping effect is done in the geometry shader
+	// so by excluding that, it acts as the same shader without that effect
+	ShaderManager::getInstance().loadShader("Default", false, "../res/shaders/shader.vert", "../res/shaders/shader.frag");
+	UBOManager::getInstance().bindUBOToShader("Matrices", ShaderManager::getInstance().getShader("Default")->ID(), "Matrices");
+	ShaderManager::getInstance().getShader("Default")->Bind();
+	ShaderManager::getInstance().getShader("Default")->setInt("colourSampler", 0);
+	ShaderManager::getInstance().getShader("Default")->setInt("normalSampler", 1);
 }
 
 void MainGame::loadTextures()

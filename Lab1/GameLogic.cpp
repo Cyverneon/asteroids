@@ -46,7 +46,7 @@ void GameLogic::initPlayer()
 	_player = GameObjectManager::getInstance().createGameObject(
 		"Player",
 		"PlayerShip",
-		"DefaultShader",
+		"ScreenWrap",
 		std::vector<std::string>{"RockColour", "RockNormal"},
 		glm::vec3(0, 0, 0),
 		glm::vec3(0, 0, 0),
@@ -106,10 +106,10 @@ void GameLogic::movePlayer(float delta)
 
 	_playerTransform->pos += _player->velocity * delta;
 
-	float minX = -12.0;
-	float maxX = 12.0;
-	float minY = -7.0;
-	float maxY = 7.0;
+	float minX = -12.8;
+	float maxX = 12.8;
+	float minY = -7.2;
+	float maxY = 7.2;
 
 	float rangeX = maxX - minX;
 	float offsetX = minX;
