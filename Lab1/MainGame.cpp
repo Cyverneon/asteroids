@@ -18,7 +18,8 @@ void MainGame::run()
 
 void MainGame::loadMeshes()
 {
-	MeshManager::getInstance().loadMesh("PlayerShip", "../res/asteroid1.obj");
+	MeshManager::getInstance().loadMesh("PlayerShip", "../res/ship.obj");
+	MeshManager::getInstance().loadMesh("Asteroid", "../res/asteroid1.obj");
 }
 
 void MainGame::loadShaders()
@@ -42,6 +43,8 @@ void MainGame::loadTextures()
 {
 	TextureManager::getInstance().loadTexture("RockColour", "../res/textures/RockColour.png");
 	TextureManager::getInstance().loadTexture("RockNormal", "../res/textures/RockNormal.png");
+	TextureManager::getInstance().loadTexture("MetalColour", "../res/textures/MetalColour.png");
+	TextureManager::getInstance().loadTexture("MetalNormal", "../res/textures/MetalNormal.png");
 }
 
 void MainGame::initSystems()

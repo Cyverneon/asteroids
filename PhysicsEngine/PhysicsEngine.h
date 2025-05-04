@@ -13,6 +13,8 @@
 // Function to set the forward direction of an object
 extern "C" PHYSICS_API void setForwardDirection(GameObject * obj, glm::vec3 newForward);
 
+extern "C" PHYSICS_API void setForwardDirectionFromRot(GameObject * obj, glm::vec3 newRotation);
+
 // Function to apply thrust to an object
 extern "C" PHYSICS_API void applyThrust(GameObject * obj, float thrustAmount);
 

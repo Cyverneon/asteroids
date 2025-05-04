@@ -14,11 +14,13 @@ void GameLogic::initialiseGame()
 {
 	loadPhysicsEngine();
 	initPlayer();
+	createAsteroids();
 }
 
 void GameLogic::updateGame(float delta)
 {
 	movePlayer(delta);
+	moveAsteroids(delta);
 }
 
 void GameLogic::loadPhysicsEngine()
@@ -30,6 +32,7 @@ void GameLogic::loadPhysicsEngine()
 	}
 
 	setForwardDirection = DLLManager::getInstance().getFunction<void(*)(GameObject*, glm::vec3)>("PhysicsEngine.dll", "setForwardDirection");
+	setForwardDirectionFromRot = DLLManager::getInstance().getFunction<void(*)(GameObject*, glm::vec3)>("PhysicsEngine.dll", "setForwardDirectionFromRot");
 	applyThrust = DLLManager::getInstance().getFunction<void(*)(GameObject*, float)>("PhysicsEngine.dll", "applyThrust");
 	updatePhysics = DLLManager::getInstance().getFunction<void(*)(GameObject*, float)>("PhysicsEngine.dll", "updatePhysics");
 	checkCollisionRadius = DLLManager::getInstance().getFunction<bool(*)(const GameObject*, const GameObject*, float, float)>("PhysicsEngine.dll", "checkCollisionRadius");
@@ -47,10 +50,10 @@ void GameLogic::initPlayer()
 		"Player",
 		"PlayerShip",
 		"ScreenWrap",
-		std::vector<std::string>{"RockColour", "RockNormal"},
+		std::vector<std::string>{"MetalColour", "MetalNormal"},
 		glm::vec3(0, 0, 0),
 		glm::vec3(0, 0, 0),
-		glm::vec3(1, 1, 1)
+		glm::vec3(0.5, 0.5, 0.5)
 	);
 
 	_playerTransform = _player->_transform;
@@ -58,7 +61,42 @@ void GameLogic::initPlayer()
 
 void GameLogic::createAsteroids()
 {
+	std::vector<float> asteroidRotations = { 35, 160, 230, 10, 305 };
+	std::vector<std::pair<float, float>> asteroidPositions = {
+		{5, 5 },
+		{-10, 1},
+		{8, 4},
+		{-3, -5},
+		{1, -1}
+	};
 
+	for (int i = 0; i < 3; i++)
+	{
+		_asteroids.push_back(GameObjectManager::getInstance().createGameObject(
+			"Asteroid" + std::to_string(i),
+			"Asteroid",
+			"ScreenWrap",
+			std::vector<std::string>{"RockColour", "RockNormal"},
+			glm::vec3(asteroidPositions[i].first, 0, asteroidPositions[i].second),
+			glm::vec3(0, asteroidRotations[i], 0),
+			glm::vec3(1.5, 1.5, 1.5)
+		));
+
+		setForwardDirectionFromRot(_asteroids[i].get(), _asteroids[i]->_transform->rot);
+	}
+}
+
+glm::vec3 GameLogic::wrapObjectPosition(glm::vec3 pos)
+{
+	if (pos.x > maxX)
+		pos.x = minX;
+	else if (pos.x < minX)
+		pos.x = maxX;
+	if (pos.z > maxY)
+		pos.z = minY;
+	else if (pos.z < minY)
+		pos.z = maxY;
+	return pos;
 }
 
 void GameLogic::movePlayer(float delta)
@@ -81,54 +119,31 @@ void GameLogic::movePlayer(float delta)
 	}
 
 	// increase and decrease Y rotation
-	// calculate new forward direction from 
-	//forward.x = cos(pitch) * sin(yaw);
-	//forward.y = -sin(pitch);
-	//forward.z = cos(pitch) * cos(yaw);
 	if (kbState[SDL_SCANCODE_A])
 	{
 		glm::vec3 newRotation = glm::vec3(0.0f, _playerTransform->rot.y + glm::radians(_playerRotSpeed * delta), 0.0f);
 		_playerTransform->rot = newRotation;
-		setForwardDirection(_player.get(), glm::vec3(
-			(cos(newRotation.x) * sin(newRotation.y)),
-			-sin(newRotation.x),
-			(cos(newRotation.x) * cos(newRotation.y))));
+		setForwardDirectionFromRot(_player.get(), newRotation);
 	}
 	if (kbState[SDL_SCANCODE_D])
 	{
 		glm::vec3 newRotation = glm::vec3(0.0f, _playerTransform->rot.y - glm::radians(_playerRotSpeed * delta), 0.0f);
 		_playerTransform->rot = newRotation;
-		setForwardDirection(_player.get(), glm::vec3(
-			(cos(newRotation.x) * sin(newRotation.y)),
-			-sin(newRotation.x),
-			(cos(newRotation.x) * cos(newRotation.y))));
+		setForwardDirectionFromRot(_player.get(), newRotation);
 	}
 
 	_playerTransform->pos += _player->velocity * delta;
 
-	float minX = -12.8;
-	float maxX = 12.8;
-	float minY = -7.2;
-	float maxY = 7.2;
+	_playerTransform->pos = wrapObjectPosition(_playerTransform->pos);
 
-	float rangeX = maxX - minX;
-	float offsetX = minX;
-
-	if (_playerTransform->pos.x > maxX)
-	{
-		_playerTransform->pos.x = minX;
-	}
-	else if (_playerTransform->pos.x < minX)
-	{
-		_playerTransform->pos.x = maxX;
-	}
-	if (_playerTransform->pos.z > maxY)
-	{
-		_playerTransform->pos.z = minY;
-	}
-	else if (_playerTransform->pos.z < minY)
-	{
-		_playerTransform->pos.z = maxY;
-	}
 	updatePhysics(_player.get(), delta);
+}
+
+void GameLogic::moveAsteroids(float delta)
+{
+	for (auto& asteroid : _asteroids)
+	{
+		asteroid->_transform->pos += glm::normalize(asteroid->forwardDirection) * _asteroidSpeed * delta;
+		asteroid->_transform->pos = wrapObjectPosition(asteroid->_transform->pos);
+	}
 }

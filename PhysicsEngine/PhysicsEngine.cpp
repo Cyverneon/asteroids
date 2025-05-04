@@ -6,6 +6,20 @@ extern "C" PHYSICS_API void setForwardDirection(GameObject* obj, glm::vec3 newFo
     obj->forwardDirection = glm::normalize(newForward);
 }
 
+extern "C" PHYSICS_API void setForwardDirectionFromRot(GameObject * obj, glm::vec3 newRotation)
+{
+    // calculate new forward direction from 
+    //forward.x = cos(pitch) * sin(yaw);
+    //forward.y = -sin(pitch);
+    //forward.z = cos(pitch) * cos(yaw);
+
+    glm::vec3 newForward = glm::vec3(
+        (cos(newRotation.x) * sin(newRotation.y)),
+        -sin(newRotation.x),
+        (cos(newRotation.x) * cos(newRotation.y)));
+    obj->forwardDirection = glm::normalize(newForward);
+}
+
 extern "C" PHYSICS_API void applyThrust(GameObject* obj, float thrustAmount)
 {
     obj->velocity += obj->forwardDirection * thrustAmount;

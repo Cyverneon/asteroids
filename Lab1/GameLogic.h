@@ -30,17 +30,30 @@ private:
 	//run
 	void createAsteroids();
 	void movePlayer(float delta);
+	void moveAsteroids(float delta);
+	glm::vec3 wrapObjectPosition(glm::vec3 pos);
 
 	std::shared_ptr<GameObject> _player;
 	Transform* _playerTransform = nullptr;
+
+	std::vector<std::shared_ptr<GameObject>> _asteroids;
 
 	// units per second
 	float _playerSpeed = 50.0f;
 	// degrees per second
 	float _playerRotSpeed = 180.0f;
 
+	float _asteroidSpeed = 3.0;
+
+	// object boundaries in world space
+	float minX = -12.8;
+	float maxX = 12.8;
+	float minY = -7.2;
+	float maxY = 7.2;
+
 	// Function pointers for physics engine functions
 	void (*setForwardDirection)(GameObject*, glm::vec3) = nullptr;
+	void (*setForwardDirectionFromRot)(GameObject*, glm::vec3) = nullptr;
 	void (*applyThrust)(GameObject*, float) = nullptr;
 	void (*updatePhysics)(GameObject*, float) = nullptr;
 	bool (*checkCollisionRadius)(const GameObject*, const GameObject*, float, float) = nullptr;
