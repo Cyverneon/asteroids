@@ -31,7 +31,7 @@ void MainGame::loadShaders()
 	ShaderManager::getInstance().getShader("ScreenWrap")->setInt("normalSampler", 1);
 
 	// screen wrapping effect is done in the geometry shader
-	// so by excluding that, it acts as the same shader without that effect
+	// by excluding that, it acts as the same shader without that effect
 	ShaderManager::getInstance().loadShader("Default", false, "../res/shaders/shader.vert", "../res/shaders/shader.frag");
 	UBOManager::getInstance().bindUBOToShader("Matrices", ShaderManager::getInstance().getShader("Default")->ID(), "Matrices");
 	ShaderManager::getInstance().getShader("Default")->Bind();
@@ -50,13 +50,13 @@ void MainGame::loadTextures()
 void MainGame::initSystems()
 {
 	srand(time(0));
-	_renderer.setupUBOs();
+	_game.initCamera(_gameDisplay.getWidth(), _gameDisplay.getHeight());
 	_renderer.init(&_gameDisplay, &_game._camera);
+	_renderer.setupUBOs();
 	loadShaders();
 	loadMeshes();
 	loadTextures();
 	_game.initialiseGame();
-	_game.initCamera(_gameDisplay.getWidth(), _gameDisplay.getHeight());
 }
 
 void MainGame::calculateDeltaTime()

@@ -13,8 +13,8 @@ void Renderer::setupUBOs()
 	// Initialize with identity matrices to avoid garbage data
 	glm::mat4 identity = glm::mat4(1.0f);
 	UBOManager::getInstance().updateUBOData("Matrices", 0, glm::value_ptr(identity), sizeof(glm::mat4));
-	UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4), glm::value_ptr(identity), sizeof(glm::mat4));
-	UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4) * 2, glm::value_ptr(identity), sizeof(glm::mat4));
+	UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4), glm::value_ptr(_camera->getView()), sizeof(glm::mat4));
+	UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4) * 2, glm::value_ptr(_camera->getProjection()), sizeof(glm::mat4));
 }
 
 void Renderer::setActiveShader(const std::string& shaderTag)
@@ -54,11 +54,12 @@ void Renderer::renderGameObjects()
 		}
 
 		glm::mat4 model = obj.second->_transform->GetModel();
-		glm::mat4 view = _camera->getView();
-		glm::mat4 projection = _camera->getProjection();
 		UBOManager::getInstance().updateUBOData("Matrices", 0, glm::value_ptr(model), sizeof(glm::mat4));
-		UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4), glm::value_ptr(view), sizeof(glm::mat4));
-		UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4) * 2, glm::value_ptr(projection), sizeof(glm::mat4));
+		// view and projection matrices don't actually need updated for asteroids since the camera never moves
+		//glm::mat4 view = _camera->getView();
+		//glm::mat4 projection = _camera->getProjection();
+		//UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4), glm::value_ptr(view), sizeof(glm::mat4));
+		//UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4) * 2, glm::value_ptr(projection), sizeof(glm::mat4));
 
 		MeshManager::getInstance().getMesh(obj.second->_meshTag)->draw();
 	}
