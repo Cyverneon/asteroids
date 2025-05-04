@@ -14,7 +14,7 @@ void GameLogic::initialiseGame()
 {
 	loadPhysicsEngine();
 	initPlayer();
-	createAsteroids();
+	spawnAsteroidRound();
 	ShaderManager::getInstance().getShader("ScreenWrap")->Bind();
 	ShaderManager::getInstance().getShader("ScreenWrap")->setFloat("minX", -maxX);
 	ShaderManager::getInstance().getShader("ScreenWrap")->setFloat("maxX", maxX);
@@ -64,29 +64,40 @@ void GameLogic::initPlayer()
 	_playerTransform = _player->_transform;
 }
 
-void GameLogic::createAsteroids()
+void GameLogic::spawnAsteroid(std::string tag, glm::vec3 pos, glm::vec3 rot)
 {
-	std::vector<float> asteroidRotations = { 35, 160, 230, 10, 305 };
+	_asteroids.push_back(GameObjectManager::getInstance().createGameObject(
+		tag + std::to_string(time(0)),
+		"Asteroid",
+		"ScreenWrap",
+		std::vector<std::string>{"RockColour", "RockNormal"},
+		pos,
+		rot,
+		glm::vec3(1.5, 1.5, 1.5)
+	));
 
+	setForwardDirectionFromRot(_asteroids[_asteroids.size()-1].get(), _asteroids[_asteroids.size() - 1]->_transform->rot);
+}
+
+void GameLogic::spawnAsteroidRound()
+{
 	for (int i = 0; i < 3; i++)
 	{
-		float xPos = fmod(rand(), maxX/2) + maxX/2;
+		// asteroids only spawn on the outside of the screen so the player has time to react to them
+		// this is done by getting random value within half the max coordinates ( offset of the top and right edges from the center) then adding half again
+		// so asteroids spawn in topmost and rightmost quarter
+		// then 50/50 chance of becoming negative so they can also spawn in leftmost and bottommost quarters
+		float xPos = ((float)rand()/RAND_MAX * (maxX / 2)) + maxX / 2;
 		xPos = (rand() % 2 == 0) ? xPos : -xPos;
 
-		float zPos = fmod(rand(), maxZ/2) + maxZ/2;
+		float zPos = ((float)rand()/RAND_MAX * (maxZ / 2)) + maxZ / 2;
 		zPos = (rand() % 2 == 0) ? zPos : -zPos;
 
-		_asteroids.push_back(GameObjectManager::getInstance().createGameObject(
-			"Asteroid" + std::to_string(i),
-			"Asteroid",
-			"ScreenWrap",
-			std::vector<std::string>{"RockColour", "RockNormal"},
-			glm::vec3(xPos, 0, zPos),
-			glm::vec3(0, asteroidRotations[i], 0),
-			glm::vec3(1.5, 1.5, 1.5)
-		));
+		// rotate asteroid to be pointing towards the middle of the screen where player spawns
+		// with some random offset between -0.5 and 0.5 (radians) to feel more natural
+		float yRot = atan2(-xPos, -zPos) + (float)rand()/RAND_MAX - 0.5;
 
-		setForwardDirectionFromRot(_asteroids[i].get(), _asteroids[i]->_transform->rot);
+		spawnAsteroid("AsteroidBig" + std::to_string(i), glm::vec3(xPos, 0, zPos), glm::vec3(0, yRot, 0));
 	}
 }
 

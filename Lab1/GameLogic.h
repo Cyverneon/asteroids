@@ -28,7 +28,8 @@ private:
 	void initPlayer();
 
 	//run
-	void createAsteroids();
+	void spawnAsteroid(std::string tag, glm::vec3 pos, glm::vec3 rot);
+	void spawnAsteroidRound();
 	void movePlayer(float delta);
 	void moveAsteroids(float delta);
 	glm::vec3 wrapObjectPosition(glm::vec3 pos);
@@ -43,7 +44,7 @@ private:
 	// degrees per second
 	float _playerRotSpeed = 180.0f;
 
-	float _asteroidSpeed = 3.0;
+	float _asteroidSpeed = 2.0;
 
 	// object boundaries in world space
 	// since the origin is (0, 0, 0), gameplay code assumes the min offsets are max offsets * -1
