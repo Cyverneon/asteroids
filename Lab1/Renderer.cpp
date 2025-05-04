@@ -48,19 +48,17 @@ void Renderer::renderGameObjects()
 		if (obj.second->_shaderTag != _activeShaderTag)
 			setActiveShader(obj.second->_shaderTag);
 
-		// Update UBO for this object's transform
-		glm::mat4 model = obj.second->_transform->GetModel();
-		glm::mat4 view = _camera->getView();
-		glm::mat4 projection = _camera->getProjection();
-
-		UBOManager::getInstance().updateUBOData("Matrices", 0, glm::value_ptr(model), sizeof(glm::mat4));
-		UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4), glm::value_ptr(view), sizeof(glm::mat4));
-		UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4) * 2, glm::value_ptr(projection), sizeof(glm::mat4));
-
 		for (int i = 0; i < obj.second->_textureTags.size(); i++)
 		{
 			TextureManager::getInstance().getTexture(obj.second->_textureTags[i])->Bind(i);
 		}
+
+		glm::mat4 model = obj.second->_transform->GetModel();
+		glm::mat4 view = _camera->getView();
+		glm::mat4 projection = _camera->getProjection();
+		UBOManager::getInstance().updateUBOData("Matrices", 0, glm::value_ptr(model), sizeof(glm::mat4));
+		UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4), glm::value_ptr(view), sizeof(glm::mat4));
+		UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4) * 2, glm::value_ptr(projection), sizeof(glm::mat4));
 
 		MeshManager::getInstance().getMesh(obj.second->_meshTag)->draw();
 	}

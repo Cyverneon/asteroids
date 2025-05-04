@@ -9,7 +9,7 @@ class ShaderManager {
 public:
     static ShaderManager& getInstance(); // Singleton instance
 
-    std::shared_ptr<Shader> loadShader(const std::string& tag, const std::string& vertFile, const std::string& fragFile);
+    std::shared_ptr<Shader> loadShader(const std::string& tag, bool geom, const std::string& vertFile, const std::string& fragFile, const std::string& geomFile = "");
     std::shared_ptr<Shader> getShader(const std::string& tag);
 
     void clear();

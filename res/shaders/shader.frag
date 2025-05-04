@@ -5,7 +5,7 @@ in VS_OUT
     vec3 position;
     vec2 texcoord;
     mat3 TBN;
-} vs_out;
+} fs_in;
 
 out vec4 FragColor;
 
@@ -39,12 +39,12 @@ const float minY = -7.0;
 const float maxY = 7.0;
 
 void main() {
-    vec3 normal = texture(normalSampler, vs_out.texcoord).rgb;
+    vec3 normal = texture(normalSampler, fs_in.texcoord).rgb;
     normal = normal * 2.0 - 1.0;
-    normal = normalize(vs_out.TBN * normal);
+    normal = normalize(fs_in.TBN * normal);
 
     // Normalise Vectors
-    vec3 lightDir = normalize(lightPos - vs_out.position);
+    vec3 lightDir = normalize(lightPos - fs_in.position);
     
     // Ambient Light
     vec3 ambient = ambientColor;
@@ -54,7 +54,7 @@ void main() {
     vec3 diffuse = diff * lightColor;
 
     // Specular Light (Blinn-Phong)
-    vec3 viewDir = normalize(-vs_out.position);
+    vec3 viewDir = normalize(-fs_in.position);
     vec3 halfwayDir = normalize(lightDir + viewDir);
     float spec = pow(max(dot(normal, halfwayDir), 0.0), shininess);
     vec3 specular = spec * lightColor;
@@ -63,13 +63,13 @@ void main() {
     vec3 lighting = ambient + diffuse + specular;
 
     // Texture Sampling
-    vec4 texColor = texture(colourSampler, vs_out.texcoord);
+    vec4 texColor = texture(colourSampler, fs_in.texcoord);
 
     // Final Output
     FragColor = texColor * vec4(lighting, 1.0);
 
     // Texture testing
-    //FragColor = texture(normalSampler, vs_out.texcoord);
+    //FragColor = texture(normalSampler, fs_in.texcoord);
 }
 
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
@@ -85,8 +85,8 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
                                 (light.linear * distance) +
                                 (light.quadratic * (distance * distance)));
     
-    vec3 ambient = light.ambient * vec3(texture(colourSampler, vs_out.texcoord));
-    vec3 diffuse = light.diffuse * diff * vec3(texture(colourSampler, vs_out.texcoord));
+    vec3 ambient = light.ambient * vec3(texture(colourSampler, fs_in.texcoord));
+    vec3 diffuse = light.diffuse * diff * vec3(texture(colourSampler, fs_in.texcoord));
     ambient *= attenuation;
     diffuse *= attenuation;
 

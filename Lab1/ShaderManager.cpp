@@ -7,7 +7,7 @@ ShaderManager& ShaderManager::getInstance()
     return instance;
 }
 
-std::shared_ptr<Shader> ShaderManager::loadShader(const std::string& tag, const std::string& vertFile, const std::string& fragFile)
+std::shared_ptr<Shader> ShaderManager::loadShader(const std::string& tag, bool geom, const std::string& vertFile, const std::string& fragFile, const std::string& geomFile)
 {
     if (_shaders.find(tag) != _shaders.end())
     {
@@ -16,7 +16,12 @@ std::shared_ptr<Shader> ShaderManager::loadShader(const std::string& tag, const 
     }
 
     std::shared_ptr<Shader> shader = std::make_shared<Shader>(); // declare shared pointer on the heap. 
-    shader->init(vertFile, fragFile);
+
+    if (geom)
+        shader->initGeo(vertFile, geomFile, fragFile);
+    else
+        shader->init(vertFile, fragFile);
+
     _shaders[tag] = shader;
 
     return shader;

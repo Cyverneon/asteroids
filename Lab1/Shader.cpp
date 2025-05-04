@@ -28,12 +28,12 @@ void Shader::init(const std::string& vertFile, const std::string& fragFile)
 	uniforms[TRANSFORM_U] = glGetUniformLocation(shaderID, "transform"); // associate with the location of uniform variable within a program
 }
 
-void Shader::initGeo()
+void Shader::initGeo(const std::string& vertFile, const std::string& geomFile, const std::string& fragFile)
 {
 	shaderID = glCreateProgram(); // create shader program (openGL saves as ref number)
-	shaders1[0] = CreateShader(LoadShader("..\\res\\shaderGeoText.vert"), GL_VERTEX_SHADER); // create vertex shader
-	shaders1[1] = CreateShader(LoadShader("..\\res\\shaderGeoText.geom"), GL_GEOMETRY_SHADER); // create fragment shader
-	shaders1[2] = CreateShader(LoadShader("..\\res\\shaderGeoText.frag"), GL_FRAGMENT_SHADER); // create fragment shader
+	shaders1[0] = CreateShader(LoadShader(vertFile), GL_VERTEX_SHADER); // create vertex shader
+	shaders1[1] = CreateShader(LoadShader(geomFile), GL_GEOMETRY_SHADER); // create fragment shader
+	shaders1[2] = CreateShader(LoadShader(fragFile), GL_FRAGMENT_SHADER); // create fragment shader
 
 
 	for (unsigned int i = 0; i < 3; i++)
@@ -53,9 +53,6 @@ void Shader::initGeo()
 
 	uniforms[TRANSFORM_U] = glGetUniformLocation(shaderID, "transform"); // associate with the location of uniform variable within a program
 }
-
-
-
 
 Shader::~Shader()
 {

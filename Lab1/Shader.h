@@ -14,7 +14,7 @@ public:
 	void Bind(); //Set gpu to use our shaders
 	void Update(const Transform& transform, const Camera& camera);
 	void init(const std::string& vertFile, const std::string& fragFile);
-	void initGeo();
+	void initGeo(const std::string& vertFile, const std::string& geomFile, const std::string& fragFile);
 
 	std::string LoadShader(const std::string& fileName);
 	void CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMessage);

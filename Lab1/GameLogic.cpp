@@ -75,10 +75,10 @@ void GameLogic::movePlayer(float delta)
 	// backwards movement was disabled because it doesn't really make sense for the ship's thrusters to be able to reverse
 	// and isn't possible in actual asteroids
 	// left it here so it can be re-enabled if wanted
-	//if (kbState[SDL_SCANCODE_S])
-	//{
-	//	applyThrust(_player.get(), -_playerSpeed * delta);
-	//}
+	if (kbState[SDL_SCANCODE_S])
+	{
+		applyThrust(_player.get(), -_playerSpeed * delta);
+	}
 
 	// increase and decrease Y rotation
 	// calculate new forward direction from 
@@ -110,6 +110,9 @@ void GameLogic::movePlayer(float delta)
 	float maxX = 12.0;
 	float minY = -7.0;
 	float maxY = 7.0;
+
+	float rangeX = maxX - minX;
+	float offsetX = minX;
 
 	if (_playerTransform->pos.x > maxX)
 	{

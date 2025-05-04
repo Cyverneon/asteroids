@@ -23,7 +23,7 @@ void MainGame::loadMeshes()
 
 void MainGame::loadShaders()
 {
-	ShaderManager::getInstance().loadShader("DefaultShader", "../res/shaders/shader.vert", "../res/shaders/shader.frag");
+	ShaderManager::getInstance().loadShader("DefaultShader", true, "../res/shaders/shader.vert", "../res/shaders/shader.frag", "../res/shaders/shader.geom");
 
 	UBOManager::getInstance().bindUBOToShader("Matrices", ShaderManager::getInstance().getShader("DefaultShader")->ID(), "Matrices");
 
