@@ -23,10 +23,10 @@ layout(std140) uniform Matrices {
     mat4 projection;
 };
 
-const float minX = -12.8;
-const float maxX = 12.8;
-const float minZ = -7.2;
-const float maxZ = 7.2;
+uniform float minX;
+uniform float maxX;
+uniform float minZ;
+uniform float maxZ;
 
 bool xTri = false;
 bool zTri = false;

@@ -48,8 +48,8 @@ private:
 	// object boundaries in world space
 	float minX = -12.8;
 	float maxX = 12.8;
-	float minY = -7.2;
-	float maxY = 7.2;
+	float minZ = -7.3;
+	float maxZ = 7.3;
 
 	// Function pointers for physics engine functions
 	void (*setForwardDirection)(GameObject*, glm::vec3) = nullptr;

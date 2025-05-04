@@ -15,6 +15,11 @@ void GameLogic::initialiseGame()
 	loadPhysicsEngine();
 	initPlayer();
 	createAsteroids();
+	ShaderManager::getInstance().getShader("ScreenWrap")->Bind();
+	ShaderManager::getInstance().getShader("ScreenWrap")->setFloat("minX", minX);
+	ShaderManager::getInstance().getShader("ScreenWrap")->setFloat("maxX", maxX);
+	ShaderManager::getInstance().getShader("ScreenWrap")->setFloat("minZ", minZ);
+	ShaderManager::getInstance().getShader("ScreenWrap")->setFloat("maxZ", maxZ);
 }
 
 void GameLogic::updateGame(float delta)
@@ -92,10 +97,10 @@ glm::vec3 GameLogic::wrapObjectPosition(glm::vec3 pos)
 		pos.x = minX;
 	else if (pos.x < minX)
 		pos.x = maxX;
-	if (pos.z > maxY)
-		pos.z = minY;
-	else if (pos.z < minY)
-		pos.z = maxY;
+	if (pos.z > maxZ)
+		pos.z = minZ;
+	else if (pos.z < minZ)
+		pos.z = maxZ;
 	return pos;
 }
 
