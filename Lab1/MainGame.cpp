@@ -49,6 +49,7 @@ void MainGame::loadTextures()
 
 void MainGame::initSystems()
 {
+	srand(time(0));
 	_renderer.setupUBOs();
 	_renderer.init(&_gameDisplay, &_game._camera);
 	loadShaders();

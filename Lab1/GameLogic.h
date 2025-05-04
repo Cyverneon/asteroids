@@ -46,9 +46,9 @@ private:
 	float _asteroidSpeed = 3.0;
 
 	// object boundaries in world space
-	float minX = -12.8;
+	// since the origin is (0, 0, 0), gameplay code assumes the min offsets are max offsets * -1
+	// things would need fixed if the origin wasn't 0 on all axis but idk any reason to not keep it simple and do that
 	float maxX = 12.8;
-	float minZ = -7.3;
 	float maxZ = 7.3;
 
 	// Function pointers for physics engine functions

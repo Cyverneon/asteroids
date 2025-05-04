@@ -16,9 +16,9 @@ void GameLogic::initialiseGame()
 	initPlayer();
 	createAsteroids();
 	ShaderManager::getInstance().getShader("ScreenWrap")->Bind();
-	ShaderManager::getInstance().getShader("ScreenWrap")->setFloat("minX", minX);
+	ShaderManager::getInstance().getShader("ScreenWrap")->setFloat("minX", -maxX);
 	ShaderManager::getInstance().getShader("ScreenWrap")->setFloat("maxX", maxX);
-	ShaderManager::getInstance().getShader("ScreenWrap")->setFloat("minZ", minZ);
+	ShaderManager::getInstance().getShader("ScreenWrap")->setFloat("minZ", -maxZ);
 	ShaderManager::getInstance().getShader("ScreenWrap")->setFloat("maxZ", maxZ);
 }
 
@@ -67,22 +67,21 @@ void GameLogic::initPlayer()
 void GameLogic::createAsteroids()
 {
 	std::vector<float> asteroidRotations = { 35, 160, 230, 10, 305 };
-	std::vector<std::pair<float, float>> asteroidPositions = {
-		{5, 5 },
-		{-10, 1},
-		{8, 4},
-		{-3, -5},
-		{1, -1}
-	};
 
 	for (int i = 0; i < 3; i++)
 	{
+		float xPos = fmod(rand(), maxX/2) + maxX/2;
+		xPos = (rand() % 2 == 0) ? xPos : -xPos;
+
+		float zPos = fmod(rand(), maxZ/2) + maxZ/2;
+		zPos = (rand() % 2 == 0) ? zPos : -zPos;
+
 		_asteroids.push_back(GameObjectManager::getInstance().createGameObject(
 			"Asteroid" + std::to_string(i),
 			"Asteroid",
 			"ScreenWrap",
 			std::vector<std::string>{"RockColour", "RockNormal"},
-			glm::vec3(asteroidPositions[i].first, 0, asteroidPositions[i].second),
+			glm::vec3(xPos, 0, zPos),
 			glm::vec3(0, asteroidRotations[i], 0),
 			glm::vec3(1.5, 1.5, 1.5)
 		));
@@ -94,12 +93,12 @@ void GameLogic::createAsteroids()
 glm::vec3 GameLogic::wrapObjectPosition(glm::vec3 pos)
 {
 	if (pos.x > maxX)
-		pos.x = minX;
-	else if (pos.x < minX)
+		pos.x = -maxX;
+	else if (pos.x < -maxX)
 		pos.x = maxX;
 	if (pos.z > maxZ)
-		pos.z = minZ;
-	else if (pos.z < minZ)
+		pos.z = -maxZ;
+	else if (pos.z < -maxZ)
 		pos.z = maxZ;
 	return pos;
 }
