@@ -78,26 +78,34 @@ void GameLogic::spawnBullet()
 		glm::vec3(1.0, 1.0, 1.0)
 	);
 
+	if (bullet == nullptr)
+		return;
+
 	setForwardDirectionFromRot(bullet.get(), bullet->_transform->rot);
 
 	_playerBullets.push_back(bulletTag);
 }
 
-void GameLogic::spawnAsteroid(std::string tag, glm::vec3 pos, glm::vec3 rot)
+void GameLogic::spawnAsteroid(std::string size, glm::vec3 pos, glm::vec3 rot)
 {
+	std::string asteroidTag = "Asteroid" + size + std::to_string(rand());
+
 	std::shared_ptr<GameObject> asteroid = GameObjectManager::getInstance().createGameObject(
-		tag + std::to_string(time(0)),
+		asteroidTag,
 		"Asteroid",
-		"ScreenWrap",
+		"Default",
 		std::vector<std::string>{"RockColour", "RockNormal"},
 		pos,
 		rot,
-		glm::vec3(1.5, 1.5, 1.5)
+		glm::vec3(_asteroidSizes.at(size), _asteroidSizes.at(size), _asteroidSizes.at(size))
 	);
+
+	if (asteroid == nullptr)
+		return;
 
 	setForwardDirectionFromRot(asteroid.get(), asteroid->_transform->rot);
 
-	_asteroids.push_back(asteroid);
+	_asteroids.push_back(asteroidTag);
 }
 
 void GameLogic::spawnAsteroidRound()
@@ -118,20 +126,20 @@ void GameLogic::spawnAsteroidRound()
 		// with some random offset between -0.5 and 0.5 (radians) to feel more natural
 		float yRot = atan2(-xPos, -zPos) + (float)rand()/RAND_MAX - 0.5;
 
-		spawnAsteroid("AsteroidBig" + std::to_string(i), glm::vec3(xPos, 0, zPos), glm::vec3(0, yRot, 0));
+		spawnAsteroid("large", glm::vec3(xPos, 0, zPos), glm::vec3(0, yRot, 0));
 	}
 }
 
-glm::vec3 GameLogic::wrapObjectPosition(glm::vec3 pos)
+glm::vec3 GameLogic::wrapObjectPosition(glm::vec3 pos, glm::vec2 offset)
 {
-	if (pos.x > maxX)
-		pos.x = -maxX;
-	else if (pos.x < -maxX)
-		pos.x = maxX;
-	if (pos.z > maxZ)
-		pos.z = -maxZ;
-	else if (pos.z < -maxZ)
-		pos.z = maxZ;
+	if (pos.x > maxX+offset.x)
+		pos.x = -maxX-offset.x;
+	else if (pos.x < -maxX-offset.x)
+		pos.x = maxX+offset.x;
+	if (pos.z > maxZ+offset.y)
+		pos.z = -maxZ-offset.y;
+	else if (pos.z < -maxZ-offset.y)
+		pos.z = maxZ+offset.y;
 	return pos;
 }
 
@@ -184,17 +192,21 @@ void GameLogic::movePlayer(float delta)
 {
 	_player->_transform->pos += _player->velocity * delta;
 
-	_player->_transform->pos = wrapObjectPosition(_player->_transform->pos);
+	_player->_transform->pos = wrapObjectPosition(_player->_transform->pos, glm::vec2(0.0));
 
 	updatePhysics(_player.get(), delta);
 }
 
 void GameLogic::moveAsteroids(float delta)
 {
-	for (auto& asteroid : _asteroids)
+	for (auto& asteroidTag : _asteroids)
 	{
+		std::shared_ptr<GameObject> asteroid = GameObjectManager::getInstance().getGameObject(asteroidTag);
 		asteroid->_transform->pos += glm::normalize(asteroid->forwardDirection) * _asteroidSpeed * delta;
-		asteroid->_transform->pos = wrapObjectPosition(asteroid->_transform->pos);
+		// add some offset to the position wrap, so the asteroids go fully offscreen
+		// previously asteroids would snap round as the center hit the edge of the screen and use the screen wrap shader like the player
+		// but this was too visually busy with a lot of asteroids on screen
+		asteroid->_transform->pos = wrapObjectPosition(asteroid->_transform->pos, glm::vec2(1.5));
 	}
 }
 

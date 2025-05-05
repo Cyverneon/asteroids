@@ -29,30 +29,38 @@ private:
 
 	//run
 	void spawnBullet();
-	void spawnAsteroid(std::string tag, glm::vec3 pos, glm::vec3 rot);
+	void spawnAsteroid(std::string size, glm::vec3 pos, glm::vec3 rot);
 	void spawnAsteroidRound();
 	void processInput(float delta);
 	void movePlayer(float delta);
 	void moveAsteroids(float delta);
 	void moveBullets(float delta);
-	glm::vec3 wrapObjectPosition(glm::vec3 pos);
+	glm::vec3 wrapObjectPosition(glm::vec3 pos, glm::vec2 offset);
 
 	const Uint8* _kbState;
 
 	std::shared_ptr<GameObject> _player;
 
-	std::vector<std::shared_ptr<GameObject>> _asteroids;
+	std::vector<std::string> _asteroids;
 
 	std::vector<std::string> _playerBullets;
 
+	bool _bulletFired = false;
+
+	// configuration
+	
 	// units per second
 	const float _playerSpeed = 40.0f;
 	// degrees per second
 	const float _playerRotSpeed = 180.0f;
 
-	bool _bulletFired = false;
-
 	const float _asteroidSpeed = 2.0f;
+	const std::unordered_map<std::string, float> _asteroidSizes =
+	{
+		{"large", 1.5},
+		{"medium", 1.0},
+		{"small", 0.5}
+	};
 
 	const float _bulletSpeed = 50.0f;;
 

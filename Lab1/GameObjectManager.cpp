@@ -18,7 +18,7 @@ std::shared_ptr<GameObject> GameObjectManager::createGameObject(
     if (_gameObjects.find(tag) != _gameObjects.end())
     {
         std::cerr << "GameObject already exists with tag: " << tag << std::endl;
-        return _gameObjects[tag];
+        return nullptr;
     }
 
     std::shared_ptr<GameObject> gameObject = std::make_shared<GameObject>(tag, meshTag, shaderTag, textureTags, pos, rot, scale);
