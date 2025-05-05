@@ -18,8 +18,9 @@ void MainGame::run()
 
 void MainGame::loadMeshes()
 {
-	MeshManager::getInstance().loadMesh("PlayerShip", "../res/ship.obj");
-	MeshManager::getInstance().loadMesh("Asteroid", "../res/asteroid1.obj");
+	MeshManager::getInstance().loadMesh("PlayerShip", "../res/meshes/ship.obj");
+	MeshManager::getInstance().loadMesh("Asteroid", "../res/meshes/asteroid1.obj");
+	MeshManager::getInstance().loadMesh("Bullet", "../res/meshes/round.obj");
 }
 
 void MainGame::loadShaders()

@@ -10,7 +10,6 @@ void Renderer::setupUBOs()
 {
 	UBOManager::getInstance().createUBO("Matrices", sizeof(glm::mat4) * 3, 0);
 
-	// Initialize with identity matrices to avoid garbage data
 	glm::mat4 identity = glm::mat4(1.0f);
 	UBOManager::getInstance().updateUBOData("Matrices", 0, glm::value_ptr(identity), sizeof(glm::mat4));
 	UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4), glm::value_ptr(_camera->getView()), sizeof(glm::mat4));
@@ -23,7 +22,6 @@ void Renderer::setActiveShader(const std::string& shaderTag)
 	{
 		_activeShaderTag = shaderTag;
 		ShaderManager::getInstance().getShader(_activeShaderTag)->Bind();
-		std::cout << "Shader switched to: " << shaderTag << std::endl;
 	}
 	else
 	{

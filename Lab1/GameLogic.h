@@ -28,29 +28,34 @@ private:
 	void initPlayer();
 
 	//run
+	void spawnBullet();
 	void spawnAsteroid(std::string tag, glm::vec3 pos, glm::vec3 rot);
 	void spawnAsteroidRound();
 	void movePlayer(float delta);
 	void moveAsteroids(float delta);
+	void moveBullets(float delta);
 	glm::vec3 wrapObjectPosition(glm::vec3 pos);
 
 	std::shared_ptr<GameObject> _player;
-	Transform* _playerTransform = nullptr;
+
+	std::vector<std::shared_ptr<GameObject>> _playerBullets;
 
 	std::vector<std::shared_ptr<GameObject>> _asteroids;
 
 	// units per second
-	float _playerSpeed = 50.0f;
+	const float _playerSpeed = 40.0f;
 	// degrees per second
-	float _playerRotSpeed = 180.0f;
+	const float _playerRotSpeed = 180.0f;
 
-	float _asteroidSpeed = 2.0;
+	const float _asteroidSpeed = 2.0f;
+
+	const float _bulletSpeed = 1.0f;;
 
 	// object boundaries in world space
 	// since the origin is (0, 0, 0), gameplay code assumes the min offsets are max offsets * -1
 	// things would need fixed if the origin wasn't 0 on all axis but idk any reason to not keep it simple and do that
-	float maxX = 12.8;
-	float maxZ = 7.3;
+	const float maxX = 12.8;
+	const float maxZ = 7.3;
 
 	// Function pointers for physics engine functions
 	void (*setForwardDirection)(GameObject*, glm::vec3) = nullptr;

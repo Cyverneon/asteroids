@@ -26,6 +26,7 @@ void GameLogic::updateGame(float delta)
 {
 	movePlayer(delta);
 	moveAsteroids(delta);
+	moveBullets(delta);
 }
 
 void GameLogic::loadPhysicsEngine()
@@ -60,13 +61,28 @@ void GameLogic::initPlayer()
 		glm::vec3(0, 0, 0),
 		glm::vec3(0.5, 0.5, 0.5)
 	);
+}
 
-	_playerTransform = _player->_transform;
+void GameLogic::spawnBullet()
+{
+	std::shared_ptr<GameObject> bullet = GameObjectManager::getInstance().createGameObject(
+		"PlayerBullet" + std::to_string(time(0)),
+		"Bullet",
+		"Default",
+		std::vector<std::string>{"MetalColour", "MetalNormal"},
+		_player->_transform->pos,
+		_player->_transform->rot,
+		glm::vec3(1.0, 1.0, 1.0)
+	);
+
+	setForwardDirectionFromRot(bullet.get(), bullet->_transform->rot);
+
+	_playerBullets.push_back(bullet);
 }
 
 void GameLogic::spawnAsteroid(std::string tag, glm::vec3 pos, glm::vec3 rot)
 {
-	_asteroids.push_back(GameObjectManager::getInstance().createGameObject(
+	std::shared_ptr<GameObject> asteroid = GameObjectManager::getInstance().createGameObject(
 		tag + std::to_string(time(0)),
 		"Asteroid",
 		"ScreenWrap",
@@ -74,9 +90,11 @@ void GameLogic::spawnAsteroid(std::string tag, glm::vec3 pos, glm::vec3 rot)
 		pos,
 		rot,
 		glm::vec3(1.5, 1.5, 1.5)
-	));
+	);
 
-	setForwardDirectionFromRot(_asteroids[_asteroids.size()-1].get(), _asteroids[_asteroids.size() - 1]->_transform->rot);
+	setForwardDirectionFromRot(asteroid.get(), asteroid->_transform->rot);
+
+	_asteroids.push_back(asteroid);
 }
 
 void GameLogic::spawnAsteroidRound()
@@ -136,20 +154,25 @@ void GameLogic::movePlayer(float delta)
 	// increase and decrease Y rotation
 	if (kbState[SDL_SCANCODE_A])
 	{
-		glm::vec3 newRotation = glm::vec3(0.0f, _playerTransform->rot.y + glm::radians(_playerRotSpeed * delta), 0.0f);
-		_playerTransform->rot = newRotation;
+		glm::vec3 newRotation = glm::vec3(0.0f, _player->_transform->rot.y + glm::radians(_playerRotSpeed * delta), 0.0f);
+		_player->_transform->rot = newRotation;
 		setForwardDirectionFromRot(_player.get(), newRotation);
 	}
 	if (kbState[SDL_SCANCODE_D])
 	{
-		glm::vec3 newRotation = glm::vec3(0.0f, _playerTransform->rot.y - glm::radians(_playerRotSpeed * delta), 0.0f);
-		_playerTransform->rot = newRotation;
+		glm::vec3 newRotation = glm::vec3(0.0f, _player->_transform->rot.y - glm::radians(_playerRotSpeed * delta), 0.0f);
+		_player->_transform->rot = newRotation;
 		setForwardDirectionFromRot(_player.get(), newRotation);
 	}
 
-	_playerTransform->pos += _player->velocity * delta;
+	if (kbState[SDL_SCANCODE_SPACE])
+	{
+		spawnBullet();
+	}
 
-	_playerTransform->pos = wrapObjectPosition(_playerTransform->pos);
+	_player->_transform->pos += _player->velocity * delta;
+
+	_player->_transform->pos = wrapObjectPosition(_player->_transform->pos);
 
 	updatePhysics(_player.get(), delta);
 }
@@ -160,5 +183,13 @@ void GameLogic::moveAsteroids(float delta)
 	{
 		asteroid->_transform->pos += glm::normalize(asteroid->forwardDirection) * _asteroidSpeed * delta;
 		asteroid->_transform->pos = wrapObjectPosition(asteroid->_transform->pos);
+	}
+}
+
+void GameLogic::moveBullets(float delta)
+{
+	for (auto& bullet : _playerBullets)
+	{
+		bullet->_transform->pos += glm::normalize(bullet->forwardDirection) * _bulletSpeed * delta;
 	}
 }
