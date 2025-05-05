@@ -28,7 +28,6 @@ void GameLogic::updateGame(float delta)
 	movePlayer(delta);
 	moveAsteroids(delta);
 	moveBullets(delta);
-	TransformManager::getInstance().outputNoTransforms();
 }
 
 void GameLogic::loadPhysicsEngine()
