@@ -1,6 +1,6 @@
 #pragma once
 #include "Transform.h"
-#include "DLLManager.h"
+#include "PhysicsEngineManager.h"
 
 struct PhysicsObject
 {
@@ -24,12 +24,5 @@ public:
 
 private:
 	void updateForwardDirection();
-
-	// Function pointers for physics engine functions
-	void (*setForwardDirection_PE)(glm::vec3*, const glm::vec3) = nullptr;
-	void (*setForwardDirectionFromRot_PE)(glm::vec3*, const glm::vec3) = nullptr;
-	void (*applyThrust_PE)(glm::vec3*, const glm::vec3, const float) = nullptr;
-	void (*wrapPosition_PE)(glm::vec3*, const glm::vec2, const glm::vec2) = nullptr;
-	void (*updatePhysics_PE)(glm::vec3*, const float, const float) = nullptr;
 };
 

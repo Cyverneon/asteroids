@@ -142,6 +142,7 @@
     <ClCompile Include="MeshManager.cpp" />
     <ClCompile Include="obj_loader.cpp" />
     <ClCompile Include="OpenGLContext.cpp" />
+    <ClCompile Include="PhysicsEngineManager.cpp" />
     <ClCompile Include="PhysicsObject.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="MeshManager.h" />
     <ClInclude Include="obj_loader.h" />
     <ClInclude Include="OpenGLContext.h" />
+    <ClInclude Include="PhysicsEngineManager.h" />
     <ClInclude Include="PhysicsObject.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Shader.h" />
