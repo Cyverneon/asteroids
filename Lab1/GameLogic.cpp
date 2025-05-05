@@ -12,14 +12,13 @@ GameLogic::~GameLogic()
 
 void GameLogic::initialiseGame()
 {
-	loadPhysicsEngine();
 	initPlayer();
 	spawnAsteroidRound();
 	ShaderManager::getInstance().getShader("ScreenWrap")->Bind();
-	ShaderManager::getInstance().getShader("ScreenWrap")->setFloat("minX", -maxX);
-	ShaderManager::getInstance().getShader("ScreenWrap")->setFloat("maxX", maxX);
-	ShaderManager::getInstance().getShader("ScreenWrap")->setFloat("minZ", -maxZ);
-	ShaderManager::getInstance().getShader("ScreenWrap")->setFloat("maxZ", maxZ);
+	ShaderManager::getInstance().getShader("ScreenWrap")->setFloat("minX", -_maxX);
+	ShaderManager::getInstance().getShader("ScreenWrap")->setFloat("maxX", _maxX);
+	ShaderManager::getInstance().getShader("ScreenWrap")->setFloat("minZ", -_maxZ);
+	ShaderManager::getInstance().getShader("ScreenWrap")->setFloat("maxZ", _maxZ);
 }
 
 void GameLogic::updateGame(float delta)
@@ -28,22 +27,6 @@ void GameLogic::updateGame(float delta)
 	movePlayer(delta);
 	moveAsteroids(delta);
 	moveBullets(delta);
-}
-
-void GameLogic::loadPhysicsEngine()
-{
-	if (!DLLManager::getInstance().loadDLL("PhysicsEngine.dll"))
-	{
-		std::cerr << "Failed to load PhysicsEngine.dll" << std::endl;
-		return;
-	}
-
-	setForwardDirection = DLLManager::getInstance().getFunction<void(*)(GameObject*, glm::vec3)>("PhysicsEngine.dll", "setForwardDirection");
-	setForwardDirectionFromRot = DLLManager::getInstance().getFunction<void(*)(GameObject*, glm::vec3)>("PhysicsEngine.dll", "setForwardDirectionFromRot");
-	applyThrust = DLLManager::getInstance().getFunction<void(*)(GameObject*, float)>("PhysicsEngine.dll", "applyThrust");
-	updatePhysics = DLLManager::getInstance().getFunction<void(*)(GameObject*, float)>("PhysicsEngine.dll", "updatePhysics");
-	checkCollisionRadius = DLLManager::getInstance().getFunction<bool(*)(const GameObject*, const GameObject*, float, float)>("PhysicsEngine.dll", "checkCollisionRadius");
-	checkCollisionAABB = DLLManager::getInstance().getFunction<bool(*)(const GameObject*, const GameObject*, const glm::vec3&, const glm::vec3&)>("PhysicsEngine.dll", "checkCollisionAABB");
 }
 
 void GameLogic::initCamera(float width, float height)
@@ -81,8 +64,6 @@ void GameLogic::spawnBullet()
 	if (bullet == nullptr)
 		return;
 
-	setForwardDirectionFromRot(bullet.get(), bullet->_transform->rot);
-
 	_playerBullets.push_back(bulletTag);
 }
 
@@ -103,8 +84,6 @@ void GameLogic::spawnAsteroid(std::string size, glm::vec3 pos, glm::vec3 rot)
 	if (asteroid == nullptr)
 		return;
 
-	setForwardDirectionFromRot(asteroid.get(), asteroid->_transform->rot);
-
 	_asteroids.push_back(asteroidTag);
 }
 
@@ -116,10 +95,10 @@ void GameLogic::spawnAsteroidRound()
 		// this is done by getting random value within half the max coordinates ( offset of the top and right edges from the center) then adding half again
 		// so asteroids spawn in topmost and rightmost quarter
 		// then 50/50 chance of becoming negative so they can also spawn in leftmost and bottommost quarters
-		float xPos = ((float)rand()/RAND_MAX * (maxX / 2)) + maxX / 2;
+		float xPos = ((float)rand()/RAND_MAX * (_maxX / 2)) + _maxX / 2;
 		xPos = (rand() % 2 == 0) ? xPos : -xPos;
 
-		float zPos = ((float)rand()/RAND_MAX * (maxZ / 2)) + maxZ / 2;
+		float zPos = ((float)rand()/RAND_MAX * (_maxZ / 2)) + _maxZ / 2;
 		zPos = (rand() % 2 == 0) ? zPos : -zPos;
 
 		// rotate asteroid to be pointing towards the middle of the screen where player spawns
@@ -130,48 +109,33 @@ void GameLogic::spawnAsteroidRound()
 	}
 }
 
-glm::vec3 GameLogic::wrapObjectPosition(glm::vec3 pos, glm::vec2 offset)
-{
-	if (pos.x > maxX+offset.x)
-		pos.x = -maxX-offset.x;
-	else if (pos.x < -maxX-offset.x)
-		pos.x = maxX+offset.x;
-	if (pos.z > maxZ+offset.y)
-		pos.z = -maxZ-offset.y;
-	else if (pos.z < -maxZ-offset.y)
-		pos.z = maxZ+offset.y;
-	return pos;
-}
-
 void GameLogic::processInput(float delta)
 {
 	_kbState = SDL_GetKeyboardState(NULL);
 
 	if (_kbState[SDL_SCANCODE_W])
 	{
-		applyThrust(_player.get(), _playerSpeed * delta);
+		_player->_physicsObject.applyThrust(_playerSpeed, delta);
 	}
 
 	// backwards movement was disabled because it doesn't really make sense for the ship's thrusters to be able to reverse
 	// and isn't possible in actual asteroids
 	// left it here so it can be re-enabled if wanted
-	//if (kbState[SDL_SCANCODE_S])
-	//{
-	//	applyThrust(_player.get(), -_playerSpeed * delta);
-	//}
+	if (_kbState[SDL_SCANCODE_S])
+	{
+		_player->_physicsObject.applyThrust(-_playerSpeed, delta);
+	}
 
 	// increase and decrease Y rotation
 	if (_kbState[SDL_SCANCODE_A])
 	{
 		glm::vec3 newRotation = glm::vec3(0.0f, _player->_transform->rot.y + glm::radians(_playerRotSpeed * delta), 0.0f);
-		_player->_transform->rot = newRotation;
-		setForwardDirectionFromRot(_player.get(), newRotation);
+		_player->_physicsObject.updateRot(newRotation);
 	}
 	if (_kbState[SDL_SCANCODE_D])
 	{
 		glm::vec3 newRotation = glm::vec3(0.0f, _player->_transform->rot.y - glm::radians(_playerRotSpeed * delta), 0.0f);
-		_player->_transform->rot = newRotation;
-		setForwardDirectionFromRot(_player.get(), newRotation);
+		_player->_physicsObject.updateRot(newRotation);
 	}
 
 	if (_kbState[SDL_SCANCODE_SPACE])
@@ -190,40 +154,40 @@ void GameLogic::processInput(float delta)
 
 void GameLogic::movePlayer(float delta)
 {
-	_player->_transform->pos += _player->velocity * delta;
+	_player->_physicsObject.moveByVel(delta);
 
-	_player->_transform->pos = wrapObjectPosition(_player->_transform->pos, glm::vec2(0.0));
+	_player->_physicsObject.wrapPosition(glm::vec2(_maxX, _maxZ), glm::vec2(0.0));
 
-	updatePhysics(_player.get(), delta);
+	_player->_physicsObject.updatePhysics(delta);
 }
 
 void GameLogic::moveAsteroids(float delta)
 {
-	for (auto& asteroidTag : _asteroids)
-	{
-		std::shared_ptr<GameObject> asteroid = GameObjectManager::getInstance().getGameObject(asteroidTag);
-		asteroid->_transform->pos += glm::normalize(asteroid->forwardDirection) * _asteroidSpeed * delta;
-		// add some offset to the position wrap, so the asteroids go fully offscreen
-		// previously asteroids would snap round as the center hit the edge of the screen and use the screen wrap shader like the player
-		// but this was too visually busy with a lot of asteroids on screen
-		asteroid->_transform->pos = wrapObjectPosition(asteroid->_transform->pos, glm::vec2(1.5));
-	}
+	//for (auto& asteroidTag : _asteroids)
+	//{
+	//	std::shared_ptr<GameObject> asteroid = GameObjectManager::getInstance().getGameObject(asteroidTag);
+	//	asteroid->_transform->pos += glm::normalize(asteroid->_physicsObject.forwardDirection) * _asteroidSpeed * delta;
+	//	// add some offset to the position wrap, so the asteroids go fully offscreen
+	//	// previously asteroids would snap round as the center hit the edge of the screen and use the screen wrap shader like the player
+	//	// but this felt too visually busy with a lot of asteroids on screen
+	//	asteroid->_transform->pos = wrapObjectPosition(asteroid->_transform->pos, glm::vec2(1.5));
+	//}
 }
 
 void GameLogic::moveBullets(float delta)
 {
-	for (int i = 0; i < _playerBullets.size(); i++)
-	{
-		std::shared_ptr<GameObject> bullet = GameObjectManager::getInstance().getGameObject(_playerBullets[i]);
-		bullet->_transform->pos += glm::normalize(bullet->forwardDirection) * _bulletSpeed * delta;
-		if ((bullet->_transform->pos.x > maxX) ||
-			(bullet->_transform->pos.x < -maxX) ||
-			(bullet->_transform->pos.z > maxZ) ||
-			(bullet->_transform->pos.z < -maxZ))
-		{
-			GameObjectManager::getInstance().removeGameObject(_playerBullets[i]);
-			_playerBullets.erase(_playerBullets.begin() + i);
-			i--;
-		}
-	}
+	//for (int i = 0; i < _playerBullets.size(); i++)
+	//{
+	//	std::shared_ptr<GameObject> bullet = GameObjectManager::getInstance().getGameObject(_playerBullets[i]);
+	//	bullet->_transform->pos += glm::normalize(bullet->_physicsObject.forwardDirection) * _bulletSpeed * delta;
+	//	if ((bullet->_transform->pos.x > maxX) ||
+	//		(bullet->_transform->pos.x < -maxX) ||
+	//		(bullet->_transform->pos.z > maxZ) ||
+	//		(bullet->_transform->pos.z < -maxZ))
+	//	{
+	//		GameObjectManager::getInstance().removeGameObject(_playerBullets[i]);
+	//		_playerBullets.erase(_playerBullets.begin() + i);
+	//		i--;
+	//	}
+	//}
 }

@@ -1,12 +1,12 @@
 #include "PhysicsEngine.h"
 #include <iostream>
 
-extern "C" PHYSICS_API void setForwardDirection(GameObject* obj, glm::vec3 newForward)
+extern "C" PHYSICS_API void setForwardDirection(glm::vec3* forwardDirection, const glm::vec3 newForward)
 {
-    obj->forwardDirection = glm::normalize(newForward);
+    *forwardDirection = glm::normalize(newForward);
 }
 
-extern "C" PHYSICS_API void setForwardDirectionFromRot(GameObject * obj, glm::vec3 newRotation)
+extern "C" PHYSICS_API void setForwardDirectionFromRot(glm::vec3* forwardDirection, const glm::vec3 newRotation)
 {
     // calculate new forward direction from 
     //forward.x = cos(pitch) * sin(yaw);
@@ -17,27 +17,39 @@ extern "C" PHYSICS_API void setForwardDirectionFromRot(GameObject * obj, glm::ve
         (cos(newRotation.x) * sin(newRotation.y)),
         -sin(newRotation.x),
         (cos(newRotation.x) * cos(newRotation.y)));
-    obj->forwardDirection = glm::normalize(newForward);
+
+    *forwardDirection = glm::normalize(newForward);
 }
 
-extern "C" PHYSICS_API void applyThrust(GameObject* obj, float thrustAmount)
+extern "C" PHYSICS_API void applyThrust(glm::vec3* vel, const glm::vec3 forwardDirection, const float thrustAmount)
 {
-    obj->velocity += obj->forwardDirection * thrustAmount;
+    *vel += glm::normalize(forwardDirection) * thrustAmount;
 }
 
-extern "C" PHYSICS_API void updatePhysics(GameObject* obj, float deltaTime)
+extern "C" PHYSICS_API void wrapPosition(glm::vec3* pos, const glm::vec2 boundaries, const glm::vec2 offset)
 {
-    float dragFactor = 2.0f;
-    obj->velocity -= (obj->velocity*dragFactor)*deltaTime;
+    if (pos->x > boundaries.x + offset.x)
+        pos->x = -boundaries.x - offset.x;
+    else if (pos->x < -boundaries.x - offset.x)
+        pos->x = boundaries.x + offset.x;
+    if (pos->z > boundaries.y + offset.y)
+        pos->z = -boundaries.y - offset.y;
+    else if (pos->z < -boundaries.y - offset.y)
+        pos->z = boundaries.y + offset.y;
 }
 
-extern "C" PHYSICS_API bool checkCollisionRadius(const GameObject* a, const GameObject* b, float radiusA, float radiusB)
+extern "C" PHYSICS_API void updatePhysics(glm::vec3* vel, const float dragFactor, const float delta)
+{
+    *vel -= *vel * dragFactor * delta;
+}
+
+extern "C" PHYSICS_API bool checkCollisionRadius(const PhysicsObject* a, const PhysicsObject* b, float radiusA, float radiusB)
 {
     float distance = glm::distance(a->_transform->pos, b->_transform->pos);
     return distance < (radiusA + radiusB);
 }
 
-extern "C" PHYSICS_API bool checkCollisionAABB(const GameObject* a, const GameObject* b, const glm::vec3& halfExtentsA, const glm::vec3& halfExtentsB)
+extern "C" PHYSICS_API bool checkCollisionAABB(const PhysicsObject* a, const PhysicsObject* b, const glm::vec3& halfExtentsA, const glm::vec3& halfExtentsB)
 {
     return (
         abs(a->_transform->pos.x - b->_transform->pos.x) < (halfExtentsA.x + halfExtentsB.x) &&

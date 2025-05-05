@@ -24,7 +24,6 @@ public:
 
 private:
 	//initialise
-	void loadPhysicsEngine();
 	void initPlayer();
 
 	//run
@@ -35,7 +34,6 @@ private:
 	void movePlayer(float delta);
 	void moveAsteroids(float delta);
 	void moveBullets(float delta);
-	glm::vec3 wrapObjectPosition(glm::vec3 pos, glm::vec2 offset);
 
 	const Uint8* _kbState;
 
@@ -67,15 +65,7 @@ private:
 	// object boundaries in world space
 	// since the origin is (0, 0, 0), gameplay code assumes the min offsets are max offsets * -1
 	// things would need fixed if the origin wasn't 0 on all axis but idk any reason to not keep it simple and do that
-	const float maxX = 12.8;
-	const float maxZ = 7.3;
-
-	// Function pointers for physics engine functions
-	void (*setForwardDirection)(GameObject*, glm::vec3) = nullptr;
-	void (*setForwardDirectionFromRot)(GameObject*, glm::vec3) = nullptr;
-	void (*applyThrust)(GameObject*, float) = nullptr;
-	void (*updatePhysics)(GameObject*, float) = nullptr;
-	bool (*checkCollisionRadius)(const GameObject*, const GameObject*, float, float) = nullptr;
-	bool (*checkCollisionAABB)(const GameObject*, const GameObject*, const glm::vec3&, const glm::vec3&) = nullptr;
+	const float _maxX = 12.8;
+	const float _maxZ = 7.3;
 };
 

@@ -4,6 +4,7 @@
 #include <string>
 #include "Transform.h"
 #include "TransformManager.h"
+#include "PhysicsObject.h"
 
 struct GameObject {
     std::string _meshTag;
@@ -17,6 +18,8 @@ struct GameObject {
     // the pointer is const (i.e., can't make a new transform and assign it to _transform), but the Transform it points to is not const and can be modified
     std::shared_ptr<Transform> const _transform;
 
+    PhysicsObject _physicsObject;
+
     // Constructor-based initialization
     GameObject(const std::string tag, const std::string meshTag, const std::string shaderTag, const std::vector<std::string> textureTags, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale)
         : _meshTag(meshTag),
@@ -24,7 +27,8 @@ struct GameObject {
         _textureTags(textureTags),
         _transformTag(tag),
         // initialize _transform with the value returned from TransformManager creating a new transform
-        _transform(TransformManager::getInstance().addTransform(tag, pos, rot, scale))
+        _transform(TransformManager::getInstance().addTransform(tag, pos, rot, scale)),
+        _physicsObject(_transform)
     {
     }
 
