@@ -14,7 +14,7 @@ struct GameObject {
     glm::vec3 velocity = glm::vec3(0);               // Initial velocity
 
     // the pointer is const (i.e., can't make a new transform and assign it to _transform), but the Transform it points to is not const and can be modified
-    Transform* const _transform;
+    std::shared_ptr<Transform> const _transform;
 
     // Constructor-based initialization
     GameObject(const std::string tag, const std::string meshTag, const std::string shaderTag, const std::vector<std::string> textureTags, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale)
