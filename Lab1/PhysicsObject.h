@@ -14,11 +14,14 @@ public:
 	void moveByAmount(float amount, float delta);
 	void updatePhysics(float delta);
 	void wrapPosition(glm::vec2 boundaries, glm::vec2 offset);
+	bool checkCollision(PhysicsObject* other);
 
 	std::shared_ptr<Transform> _transform;
 
 	glm::vec3 _forwardDirection = glm::vec3(0, 0, 1);
 	glm::vec3 _velocity = glm::vec3(0);
+
+	float _collisionRadius = 1.0;
 
 	float _dragFactor = 2.0;
 

@@ -40,6 +40,11 @@ void PhysicsObject::wrapPosition(glm::vec2 boundaries, glm::vec2 offset)
 	PhysicsEngineManager::getInstance().wrapPosition(&_transform->pos, boundaries, offset);
 }
 
+bool PhysicsObject::checkCollision(PhysicsObject* other)
+{
+	return PhysicsEngineManager::getInstance().checkCollisionRadius(_transform->pos, other->_transform->pos, _collisionRadius, other->_collisionRadius);
+}
+
 void PhysicsObject::updateForwardDirection()
 {
 	PhysicsEngineManager::getInstance().setForwardDirectionFromRot(&_forwardDirection, _transform->rot);

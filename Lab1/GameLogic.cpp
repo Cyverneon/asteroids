@@ -1,14 +1,8 @@
 #include "GameLogic.h"
 
-GameLogic::GameLogic()
-{
+GameLogic::GameLogic() {}
 
-}
-
-GameLogic::~GameLogic()
-{
-
-}
+GameLogic::~GameLogic() {}
 
 void GameLogic::initialiseGame()
 {
@@ -25,8 +19,8 @@ void GameLogic::updateGame(float delta)
 {
 	processInput(delta);
 	movePlayer(delta);
-	moveAsteroids(delta);
-	moveBullets(delta);
+	updateAsteroids(delta);
+	updateBullets(delta);
 }
 
 void GameLogic::initCamera(float width, float height)
@@ -42,9 +36,11 @@ void GameLogic::initPlayer()
 		"ScreenWrap",
 		std::vector<std::string>{"MetalColour", "MetalNormal"},
 		glm::vec3(0, 0, 0),
-		glm::vec3(0, 0, 0),
+		glm::vec3(0, glm::radians(180.0), 0),
 		glm::vec3(0.5, 0.5, 0.5)
 	);
+
+	_player->_physicsObject._collisionRadius = 0.3;
 }
 
 void GameLogic::spawnBullet()
@@ -53,16 +49,18 @@ void GameLogic::spawnBullet()
 
 	std::shared_ptr<GameObject> bullet = GameObjectManager::getInstance().createGameObject(
 		bulletTag,
-		"Bullet",
+		"Sphere",
 		"Default",
 		std::vector<std::string>{"MetalColour", "MetalNormal"},
 		_player->_transform->pos,
 		_player->_transform->rot,
-		glm::vec3(0.1, 0.1, 0.1)
+		glm::vec3(0.05)
 	);
 
 	if (bullet == nullptr)
 		return;
+
+	bullet->_physicsObject._collisionRadius = 0.05;
 
 	_playerBullets.push_back(bulletTag);
 }
@@ -83,6 +81,8 @@ void GameLogic::spawnAsteroid(std::string size, glm::vec3 pos, glm::vec3 rot)
 
 	if (asteroid == nullptr)
 		return;
+
+	asteroid->_physicsObject._collisionRadius = _asteroidSizes.at(size);
 
 	_asteroids.push_back(asteroidTag);
 }
@@ -155,20 +155,37 @@ void GameLogic::movePlayer(float delta)
 	_player->_physicsObject.updatePhysics(delta);
 }
 
-void GameLogic::moveAsteroids(float delta)
+void GameLogic::updateAsteroids(float delta)
 {
-	for (auto& asteroidTag : _asteroids)
+	for (int i = 0; i < _asteroids.size(); i++)
 	{
-		std::shared_ptr<GameObject> asteroid = GameObjectManager::getInstance().getGameObject(asteroidTag);
+		// move
+		std::shared_ptr<GameObject> asteroid = GameObjectManager::getInstance().getGameObject(_asteroids[i]);
 		asteroid->_physicsObject.moveByAmount(_asteroidSpeed, delta);
 		// add some offset to the position wrap, so the asteroids go fully offscreen
 		// previously asteroids would snap round as the center hit the edge of the screen and use the screen wrap shader like the player
 		// but this felt too visually busy with a lot of asteroids on screen
 		asteroid->_physicsObject.wrapPosition(glm::vec2(_maxX, _maxZ), glm::vec2(1.5));
+
+		// check bullet collisions
+		for (int j = 0; j < _playerBullets.size(); j++)
+		{
+			if (asteroid->_physicsObject.checkCollision(&GameObjectManager::getInstance().getGameObject(_playerBullets[j])->_physicsObject))
+			{
+				// destroy asteroid
+				GameObjectManager::getInstance().removeGameObject(_asteroids[i]);
+				_asteroids.erase(_asteroids.begin() + i);
+				i--;
+				// destroy bullet
+				GameObjectManager::getInstance().removeGameObject(_playerBullets[j]);
+				_playerBullets.erase(_playerBullets.begin() + j);
+				break;
+			}
+		}
 	}
 }
 
-void GameLogic::moveBullets(float delta)
+void GameLogic::updateBullets(float delta)
 {
 	for (int i = 0; i < _playerBullets.size(); i++)
 	{
@@ -184,4 +201,9 @@ void GameLogic::moveBullets(float delta)
 			i--;
 		}
 	}
+}
+
+void GameLogic::checkPlayerDeath()
+{
+
 }

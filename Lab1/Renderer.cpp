@@ -60,6 +60,14 @@ void Renderer::renderGameObjects()
 		//UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4) * 2, glm::value_ptr(projection), sizeof(glm::mat4));
 
 		MeshManager::getInstance().getMesh(obj.second->_meshTag)->draw();
+
+		// Very jank code to render collision spheres
+		//glm::vec3 tempScale = obj.second->_transform->scale;
+		//obj.second->_transform->scale = glm::vec3((obj.second->_physicsObject._collisionRadius));
+		//model = obj.second->_transform->GetModel();
+		//UBOManager::getInstance().updateUBOData("Matrices", 0, glm::value_ptr(model), sizeof(glm::mat4));
+		//MeshManager::getInstance().getMesh("Sphere")->draw();
+		//obj.second->_transform->scale = tempScale;
 	}
 }
 

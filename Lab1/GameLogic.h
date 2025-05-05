@@ -31,9 +31,13 @@ private:
 	void spawnAsteroid(std::string size, glm::vec3 pos, glm::vec3 rot);
 	void spawnAsteroidRound();
 	void processInput(float delta);
+
 	void movePlayer(float delta);
-	void moveAsteroids(float delta);
-	void moveBullets(float delta);
+
+	void updateAsteroids(float delta);
+	void updateBullets(float delta);
+
+	void checkPlayerDeath();
 
 	const Uint8* _kbState;
 
@@ -64,7 +68,7 @@ private:
 
 	// object boundaries in world space
 	// since the origin is (0, 0, 0), gameplay code assumes the min offsets are max offsets * -1
-	// things would need fixed if the origin wasn't 0 on all axis but idk any reason to not keep it simple and do that
+	// things would need fixed if the origin wasn't 0 on all axes
 	const float _maxX = 12.8;
 	const float _maxZ = 7.3;
 };
