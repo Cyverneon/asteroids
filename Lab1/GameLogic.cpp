@@ -172,6 +172,16 @@ void GameLogic::updateAsteroids(float delta)
 		{
 			if (asteroid->_physicsObject.checkCollision(&GameObjectManager::getInstance().getGameObject(_playerBullets[j])->_physicsObject))
 			{
+				// smallest asteroids should not spawn any sub asteroids on destruction
+				if (_asteroids[i].rfind("Asteroidsmall", 0) != 0)
+				{
+					std::string size = (_asteroids[i].rfind("Asteroidlarge", 0) == 0) ? "medium" : "small";
+					// get y rotation of bullet to spawn two asteroids at 90 and -90 degree offset of direction asteroid was hit by
+					float yRot = GameObjectManager::getInstance().getGameObject(_playerBullets[j])->_transform->rot.y;
+					// spawn sub-asteroids
+					spawnAsteroid(size, asteroid->_transform->pos, glm::vec3(asteroid->_transform->rot.x, yRot + glm::radians(90.0), asteroid->_transform->rot.z));
+					spawnAsteroid(size, asteroid->_transform->pos, glm::vec3(asteroid->_transform->rot.x, yRot + glm::radians(-90.0), asteroid->_transform->rot.z));
+				}
 				// destroy asteroid
 				GameObjectManager::getInstance().removeGameObject(_asteroids[i]);
 				_asteroids.erase(_asteroids.begin() + i);
