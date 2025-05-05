@@ -14,6 +14,11 @@ public:
     bool hasTransform(const std::string& tag);
     void removeTransform(const std::string& tag);
 
+    void outputNoTransforms()
+    {
+        std::cout << _transforms.size() << std::endl;
+    }
+
     void clear();  // Clears all stored transforms
 
 private:

@@ -24,9 +24,11 @@ void GameLogic::initialiseGame()
 
 void GameLogic::updateGame(float delta)
 {
+	processInput(delta);
 	movePlayer(delta);
 	moveAsteroids(delta);
 	moveBullets(delta);
+	TransformManager::getInstance().outputNoTransforms();
 }
 
 void GameLogic::loadPhysicsEngine()
@@ -65,8 +67,10 @@ void GameLogic::initPlayer()
 
 void GameLogic::spawnBullet()
 {
+	std::string bulletTag = "PlayerBullet" + std::to_string(rand());
+
 	std::shared_ptr<GameObject> bullet = GameObjectManager::getInstance().createGameObject(
-		"PlayerBullet" + std::to_string(time(0)),
+		bulletTag,
 		"Bullet",
 		"Default",
 		std::vector<std::string>{"MetalColour", "MetalNormal"},
@@ -77,7 +81,7 @@ void GameLogic::spawnBullet()
 
 	setForwardDirectionFromRot(bullet.get(), bullet->_transform->rot);
 
-	_playerBullets.push_back(bullet);
+	_playerBullets.push_back(bulletTag);
 }
 
 void GameLogic::spawnAsteroid(std::string tag, glm::vec3 pos, glm::vec3 rot)
@@ -132,13 +136,11 @@ glm::vec3 GameLogic::wrapObjectPosition(glm::vec3 pos)
 	return pos;
 }
 
-void GameLogic::movePlayer(float delta)
+void GameLogic::processInput(float delta)
 {
-	if (!_player) return;
+	_kbState = SDL_GetKeyboardState(NULL);
 
-	const Uint8* kbState = SDL_GetKeyboardState(NULL);
-
-	if (kbState[SDL_SCANCODE_W])
+	if (_kbState[SDL_SCANCODE_W])
 	{
 		applyThrust(_player.get(), _playerSpeed * delta);
 	}
@@ -146,30 +148,41 @@ void GameLogic::movePlayer(float delta)
 	// backwards movement was disabled because it doesn't really make sense for the ship's thrusters to be able to reverse
 	// and isn't possible in actual asteroids
 	// left it here so it can be re-enabled if wanted
-	if (kbState[SDL_SCANCODE_S])
-	{
-		applyThrust(_player.get(), -_playerSpeed * delta);
-	}
+	//if (kbState[SDL_SCANCODE_S])
+	//{
+	//	applyThrust(_player.get(), -_playerSpeed * delta);
+	//}
 
 	// increase and decrease Y rotation
-	if (kbState[SDL_SCANCODE_A])
+	if (_kbState[SDL_SCANCODE_A])
 	{
 		glm::vec3 newRotation = glm::vec3(0.0f, _player->_transform->rot.y + glm::radians(_playerRotSpeed * delta), 0.0f);
 		_player->_transform->rot = newRotation;
 		setForwardDirectionFromRot(_player.get(), newRotation);
 	}
-	if (kbState[SDL_SCANCODE_D])
+	if (_kbState[SDL_SCANCODE_D])
 	{
 		glm::vec3 newRotation = glm::vec3(0.0f, _player->_transform->rot.y - glm::radians(_playerRotSpeed * delta), 0.0f);
 		_player->_transform->rot = newRotation;
 		setForwardDirectionFromRot(_player.get(), newRotation);
 	}
 
-	if (kbState[SDL_SCANCODE_SPACE])
+	if (_kbState[SDL_SCANCODE_SPACE])
 	{
-		spawnBullet();
+		if (!_bulletFired)
+		{
+			spawnBullet();
+			_bulletFired = true;
+		}
 	}
+	else
+	{
+		_bulletFired = false;
+	}
+}
 
+void GameLogic::movePlayer(float delta)
+{
 	_player->_transform->pos += _player->velocity * delta;
 
 	_player->_transform->pos = wrapObjectPosition(_player->_transform->pos);
@@ -188,8 +201,18 @@ void GameLogic::moveAsteroids(float delta)
 
 void GameLogic::moveBullets(float delta)
 {
-	for (auto& bullet : _playerBullets)
+	for (int i = 0; i < _playerBullets.size(); i++)
 	{
+		std::shared_ptr<GameObject> bullet = GameObjectManager::getInstance().getGameObject(_playerBullets[i]);
 		bullet->_transform->pos += glm::normalize(bullet->forwardDirection) * _bulletSpeed * delta;
+		if ((bullet->_transform->pos.x > maxX) ||
+			(bullet->_transform->pos.x < -maxX) ||
+			(bullet->_transform->pos.z > maxZ) ||
+			(bullet->_transform->pos.z < -maxZ))
+		{
+			GameObjectManager::getInstance().removeGameObject(_playerBullets[i]);
+			_playerBullets.erase(_playerBullets.begin() + i);
+			i--;
+		}
 	}
 }

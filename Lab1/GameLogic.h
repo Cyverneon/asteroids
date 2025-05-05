@@ -31,25 +31,30 @@ private:
 	void spawnBullet();
 	void spawnAsteroid(std::string tag, glm::vec3 pos, glm::vec3 rot);
 	void spawnAsteroidRound();
+	void processInput(float delta);
 	void movePlayer(float delta);
 	void moveAsteroids(float delta);
 	void moveBullets(float delta);
 	glm::vec3 wrapObjectPosition(glm::vec3 pos);
 
+	const Uint8* _kbState;
+
 	std::shared_ptr<GameObject> _player;
 
-	std::vector<std::shared_ptr<GameObject>> _playerBullets;
-
 	std::vector<std::shared_ptr<GameObject>> _asteroids;
+
+	std::vector<std::string> _playerBullets;
 
 	// units per second
 	const float _playerSpeed = 40.0f;
 	// degrees per second
 	const float _playerRotSpeed = 180.0f;
 
+	bool _bulletFired = false;
+
 	const float _asteroidSpeed = 2.0f;
 
-	const float _bulletSpeed = 1.0f;;
+	const float _bulletSpeed = 50.0f;;
 
 	// object boundaries in world space
 	// since the origin is (0, 0, 0), gameplay code assumes the min offsets are max offsets * -1

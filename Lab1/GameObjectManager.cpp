@@ -37,6 +37,17 @@ std::shared_ptr<GameObject> GameObjectManager::getGameObject(const std::string& 
     return _gameObjects[tag];
 }
 
+void GameObjectManager::removeGameObject(const std::string& tag)
+{
+    if (_gameObjects.find(tag) == _gameObjects.end())
+    {
+        std::cerr << "Cannot remove GameObject. Not found: " << tag << std::endl;
+        return;
+    }
+
+    _gameObjects.erase(_gameObjects.find(tag));
+}
+
 void GameObjectManager::clear()
 {
     _gameObjects.clear();
