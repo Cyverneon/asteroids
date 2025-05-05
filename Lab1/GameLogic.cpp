@@ -114,17 +114,13 @@ void GameLogic::processInput(float delta)
 	_kbState = SDL_GetKeyboardState(NULL);
 
 	if (_kbState[SDL_SCANCODE_W])
-	{
 		_player->_physicsObject.applyThrust(_playerSpeed, delta);
-	}
 
 	// backwards movement was disabled because it doesn't really make sense for the ship's thrusters to be able to reverse
 	// and isn't possible in actual asteroids
 	// left it here so it can be re-enabled if wanted
-	if (_kbState[SDL_SCANCODE_S])
-	{
-		_player->_physicsObject.applyThrust(-_playerSpeed, delta);
-	}
+	//if (_kbState[SDL_SCANCODE_S])
+	//	_player->_physicsObject.applyThrust(-_playerSpeed, delta);
 
 	// increase and decrease Y rotation
 	if (_kbState[SDL_SCANCODE_A])
@@ -155,39 +151,37 @@ void GameLogic::processInput(float delta)
 void GameLogic::movePlayer(float delta)
 {
 	_player->_physicsObject.moveByVel(delta);
-
 	_player->_physicsObject.wrapPosition(glm::vec2(_maxX, _maxZ), glm::vec2(0.0));
-
 	_player->_physicsObject.updatePhysics(delta);
 }
 
 void GameLogic::moveAsteroids(float delta)
 {
-	//for (auto& asteroidTag : _asteroids)
-	//{
-	//	std::shared_ptr<GameObject> asteroid = GameObjectManager::getInstance().getGameObject(asteroidTag);
-	//	asteroid->_transform->pos += glm::normalize(asteroid->_physicsObject.forwardDirection) * _asteroidSpeed * delta;
-	//	// add some offset to the position wrap, so the asteroids go fully offscreen
-	//	// previously asteroids would snap round as the center hit the edge of the screen and use the screen wrap shader like the player
-	//	// but this felt too visually busy with a lot of asteroids on screen
-	//	asteroid->_transform->pos = wrapObjectPosition(asteroid->_transform->pos, glm::vec2(1.5));
-	//}
+	for (auto& asteroidTag : _asteroids)
+	{
+		std::shared_ptr<GameObject> asteroid = GameObjectManager::getInstance().getGameObject(asteroidTag);
+		asteroid->_physicsObject.moveByAmount(_asteroidSpeed, delta);
+		// add some offset to the position wrap, so the asteroids go fully offscreen
+		// previously asteroids would snap round as the center hit the edge of the screen and use the screen wrap shader like the player
+		// but this felt too visually busy with a lot of asteroids on screen
+		asteroid->_physicsObject.wrapPosition(glm::vec2(_maxX, _maxZ), glm::vec2(1.5));
+	}
 }
 
 void GameLogic::moveBullets(float delta)
 {
-	//for (int i = 0; i < _playerBullets.size(); i++)
-	//{
-	//	std::shared_ptr<GameObject> bullet = GameObjectManager::getInstance().getGameObject(_playerBullets[i]);
-	//	bullet->_transform->pos += glm::normalize(bullet->_physicsObject.forwardDirection) * _bulletSpeed * delta;
-	//	if ((bullet->_transform->pos.x > maxX) ||
-	//		(bullet->_transform->pos.x < -maxX) ||
-	//		(bullet->_transform->pos.z > maxZ) ||
-	//		(bullet->_transform->pos.z < -maxZ))
-	//	{
-	//		GameObjectManager::getInstance().removeGameObject(_playerBullets[i]);
-	//		_playerBullets.erase(_playerBullets.begin() + i);
-	//		i--;
-	//	}
-	//}
+	for (int i = 0; i < _playerBullets.size(); i++)
+	{
+		std::shared_ptr<GameObject> bullet = GameObjectManager::getInstance().getGameObject(_playerBullets[i]);
+		bullet->_physicsObject.moveByAmount(_bulletSpeed, delta);
+		if ((bullet->_transform->pos.x > _maxX) ||
+			(bullet->_transform->pos.x < -_maxX) ||
+			(bullet->_transform->pos.z > _maxZ) ||
+			(bullet->_transform->pos.z < -_maxZ))
+		{
+			GameObjectManager::getInstance().removeGameObject(_playerBullets[i]);
+			_playerBullets.erase(_playerBullets.begin() + i);
+			i--;
+		}
+	}
 }
