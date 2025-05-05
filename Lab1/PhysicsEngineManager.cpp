@@ -19,6 +19,8 @@ PhysicsEngineManager::PhysicsEngineManager()
 	applyThrust = DLLManager::getInstance().getFunction<void(*)(glm::vec3*, const glm::vec3, const float)>("PhysicsEngine.dll", "applyThrust");
 	wrapPosition = DLLManager::getInstance().getFunction<void(*)(glm::vec3*, const glm::vec2, const glm::vec2)>("PhysicsEngine.dll", "wrapPosition");
 	updatePhysics = DLLManager::getInstance().getFunction<void(*)(glm::vec3*, const float, const float)>("PhysicsEngine.dll", "updatePhysics");
+	checkCollisionRadius = DLLManager::getInstance().getFunction<bool(*)(glm::vec3, glm::vec3, float, float)>("PhysicsEngine.dll", "checkCollisionRadius");
+	checkCollisionAABB = DLLManager::getInstance().getFunction<bool(*)(glm::vec3, glm::vec3, glm::vec3, glm::vec3)>("PhysicsEngine.dll", "checkCollisionAABB");
 }
 
 PhysicsEngineManager::~PhysicsEngineManager() {}

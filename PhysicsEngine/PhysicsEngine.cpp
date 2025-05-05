@@ -43,17 +43,17 @@ extern "C" PHYSICS_API void updatePhysics(glm::vec3* vel, const float dragFactor
     *vel -= *vel * dragFactor * delta;
 }
 
-extern "C" PHYSICS_API bool checkCollisionRadius(const PhysicsObject* a, const PhysicsObject* b, float radiusA, float radiusB)
+extern "C" PHYSICS_API bool checkCollisionRadius(glm::vec3 posA, glm::vec3 posB, float radiusA, float radiusB)
 {
-    float distance = glm::distance(a->_transform->pos, b->_transform->pos);
-    return distance < (radiusA + radiusB);
+    float distance = glm::distance(posA, posB);
+    return distance < (radiusA * radiusB);
 }
 
-extern "C" PHYSICS_API bool checkCollisionAABB(const PhysicsObject* a, const PhysicsObject* b, const glm::vec3& halfExtentsA, const glm::vec3& halfExtentsB)
+extern "C" PHYSICS_API bool checkCollisionAABB(glm::vec3 posA, glm::vec3 posB, glm::vec3 halfExtentsA, glm::vec3 halfExtentsB)
 {
     return (
-        abs(a->_transform->pos.x - b->_transform->pos.x) < (halfExtentsA.x + halfExtentsB.x) &&
-        abs(a->_transform->pos.y - b->_transform->pos.y) < (halfExtentsA.y + halfExtentsB.y) &&
-        abs(a->_transform->pos.z - b->_transform->pos.z) < (halfExtentsA.z + halfExtentsB.z)
+        abs(posA.x - posB.x) < (halfExtentsA.x + halfExtentsB.x) &&
+        abs(posA.y - posB.y) < (halfExtentsA.y + halfExtentsB.y) &&
+        abs(posA.z - posB.z) < (halfExtentsA.z + halfExtentsB.z)
         );
 }
