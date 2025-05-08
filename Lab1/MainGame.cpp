@@ -56,7 +56,7 @@ void MainGame::loadSounds()
 {
 	SoundManager::getInstance().loadSound("Laser", "../res/audio/laser.wav");
 	SoundManager::getInstance().loadSound("Thruster", "../res/audio/thruster.wav");
-	SoundManager::getInstance().loadSound("Explosion", "../res/audio/asteroid_explode.wav");
+	SoundManager::getInstance().loadSound("Explosion", "../res/audio/explosioncrunch.wav");
 }
 
 void MainGame::setupUBOs()

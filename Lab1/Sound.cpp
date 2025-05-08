@@ -19,6 +19,7 @@ void Sound::init(const std::string& filePath)
 
 void Sound::play()
 {
+	SDL_ClearQueuedAudio(_device);
 	int status = SDL_QueueAudio(_device, _waveStart, _waveLength);
 	SDL_PauseAudioDevice(_device, 0);
 }

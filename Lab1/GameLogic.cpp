@@ -174,6 +174,8 @@ void GameLogic::updateAsteroids(float delta)
 		{
 			if (asteroid->_physicsObject.checkCollision(&GameObjectManager::getInstance().getGameObject(_playerBullets[j])->_physicsObject))
 			{
+				// play sound
+				SoundManager::getInstance().playSound("Explosion");
 				// smallest asteroids should not spawn any sub asteroids on destruction
 				if (_asteroids[i].rfind("Asteroidsmall", 0) != 0)
 				{
