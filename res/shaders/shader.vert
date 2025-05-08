@@ -14,7 +14,6 @@ layout(std140) uniform Matrices {
 
 layout(std140) uniform MatInfo {
     float uvMult;
-    float shininess;
 };
 
 out VS_OUT

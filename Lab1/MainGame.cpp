@@ -64,7 +64,6 @@ void MainGame::setupUBOs()
 	const float f = 1.0f;
 	UBOManager::getInstance().createUBO("MatInfo", sizeof(float), 1);
 	UBOManager::getInstance().updateUBOData("MatInfo", 0, &f, sizeof(float));
-	UBOManager::getInstance().updateUBOData("MatInfo", sizeof(float), &f, sizeof(float));
 }
 
 void MainGame::initSystems()
