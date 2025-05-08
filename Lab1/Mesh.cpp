@@ -44,11 +44,13 @@ void Mesh::initModel(const IndexedModel& model) {
 
     std::cout << model.positions.size() % 3 << std::endl;
 
-    for (size_t i = 0; i < model.positions.size()-2; i+=3) {
-        glm::vec3 edge1 = model.positions[i+1] - model.positions[i];
-        glm::vec3 edge2 = model.positions[i+2] - model.positions[i];
-        glm::vec2 deltaUV1 = model.texCoords[i+1] - model.texCoords[i];
-        glm::vec2 deltaUV2 = model.texCoords[i+2] - model.texCoords[i];
+    for (size_t i = 0; i < model.positions.size(); i+=3) {
+        size_t offset1 = (i + 1) % model.positions.size();
+        size_t offset2 = (i + 2) % model.positions.size();
+        glm::vec3 edge1 = model.positions[offset1] - model.positions[i];
+        glm::vec3 edge2 = model.positions[offset2] - model.positions[i];
+        glm::vec2 deltaUV1 = model.texCoords[offset1] - model.texCoords[i];
+        glm::vec2 deltaUV2 = model.texCoords[offset2] - model.texCoords[i];
 
         float f = 1.0f / ((deltaUV1.x * deltaUV2.y) - (deltaUV2.x * deltaUV1.y));
 
@@ -66,24 +68,27 @@ void Mesh::initModel(const IndexedModel& model) {
 
         for (int j = 0; j < 3; j++)
         {
-            interleavedData.push_back(model.positions[i + j].x);
-            interleavedData.push_back(model.positions[i + j].y);
-            interleavedData.push_back(model.positions[i + j].z);
+            if (i+j < model.positions.size())
+            {
+                interleavedData.push_back(model.positions[i+j].x);
+                interleavedData.push_back(model.positions[i+j].y);
+                interleavedData.push_back(model.positions[i+j].z);
 
-            interleavedData.push_back(model.normals[i + j].x);
-            interleavedData.push_back(model.normals[i + j].y);
-            interleavedData.push_back(model.normals[i + j].z);
+                interleavedData.push_back(model.normals[i+j].x);
+                interleavedData.push_back(model.normals[i+j].y);
+                interleavedData.push_back(model.normals[i+j].z);
 
-            interleavedData.push_back(model.texCoords[i + j].x);
-            interleavedData.push_back(model.texCoords[i + j].y);
+                interleavedData.push_back(model.texCoords[i+j].x);
+                interleavedData.push_back(model.texCoords[i+j].y);
 
-            interleavedData.push_back(tangent1.x);
-            interleavedData.push_back(tangent1.y);
-            interleavedData.push_back(tangent1.z);
+                interleavedData.push_back(tangent1.x);
+                interleavedData.push_back(tangent1.y);
+                interleavedData.push_back(tangent1.z);
 
-            interleavedData.push_back(bitangent1.x);
-            interleavedData.push_back(bitangent1.y);
-            interleavedData.push_back(bitangent1.z);
+                interleavedData.push_back(bitangent1.x);
+                interleavedData.push_back(bitangent1.y);
+                interleavedData.push_back(bitangent1.z);
+            }
         }
     }
 
