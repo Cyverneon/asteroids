@@ -12,6 +12,11 @@ layout(std140) uniform Matrices {
     mat4 projection;
 };
 
+layout(std140) uniform MatInfo {
+    float uvMult;
+    float shininess;
+};
+
 out VS_OUT
 {
     vec3 position;
@@ -22,7 +27,7 @@ out VS_OUT
 void main() {
     vec4 worldPosition = model * vec4(position, 1.0);
     gl_Position = projection * view * worldPosition;
-    vs_out.texcoord = texcoord;
+    vs_out.texcoord = texcoord * uvMult;
     vs_out.position = worldPosition.xyz;
 
     vec3 T = normalize(vec3(model * vec4(tangent, 0.0)));

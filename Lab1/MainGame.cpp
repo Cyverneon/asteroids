@@ -26,7 +26,9 @@ void MainGame::loadMeshes()
 void MainGame::loadShaders()
 {
 	ShaderManager::getInstance().loadShader("ScreenWrap", true, "../res/shaders/shader.vert", "../res/shaders/shader.frag", "../res/shaders/shader.geom");
+	// bind UBOs
 	UBOManager::getInstance().bindUBOToShader("Matrices", ShaderManager::getInstance().getShader("ScreenWrap")->ID(), "Matrices");
+	UBOManager::getInstance().bindUBOToShader("MatInfo", ShaderManager::getInstance().getShader("ScreenWrap")->ID(), "MatInfo");
 	ShaderManager::getInstance().getShader("ScreenWrap")->Bind();
 	ShaderManager::getInstance().getShader("ScreenWrap")->setInt("colourSampler", 0);
 	ShaderManager::getInstance().getShader("ScreenWrap")->setInt("normalSampler", 1);
@@ -34,7 +36,9 @@ void MainGame::loadShaders()
 	// screen wrapping effect is done in the geometry shader
 	// by excluding that, it acts as the same shader without that effect
 	ShaderManager::getInstance().loadShader("Default", false, "../res/shaders/shader.vert", "../res/shaders/shader.frag");
+	// bind UBOs
 	UBOManager::getInstance().bindUBOToShader("Matrices", ShaderManager::getInstance().getShader("Default")->ID(), "Matrices");
+	UBOManager::getInstance().bindUBOToShader("MatInfo", ShaderManager::getInstance().getShader("Default")->ID(), "MatInfo");
 	ShaderManager::getInstance().getShader("Default")->Bind();
 	ShaderManager::getInstance().getShader("Default")->setInt("colourSampler", 0);
 	ShaderManager::getInstance().getShader("Default")->setInt("normalSampler", 1);
@@ -48,12 +52,28 @@ void MainGame::loadTextures()
 	TextureManager::getInstance().loadTexture("MetalNormal", "../res/textures/MetalNormal.png");
 }
 
+void MainGame::setupUBOs()
+{
+	UBOManager::getInstance().createUBO("Matrices", sizeof(glm::mat4) * 3, 0);
+
+	glm::mat4 identity = glm::mat4(1.0f);
+	UBOManager::getInstance().updateUBOData("Matrices", 0, glm::value_ptr(identity), sizeof(glm::mat4));
+	UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4), glm::value_ptr(_camera->getView()), sizeof(glm::mat4));
+	UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4) * 2, glm::value_ptr(_camera->getProjection()), sizeof(glm::mat4));
+
+	const float f = 1.0f;
+	UBOManager::getInstance().createUBO("MatInfo", sizeof(float), 1);
+	UBOManager::getInstance().updateUBOData("MatInfo", 0, &f, sizeof(float));
+	UBOManager::getInstance().updateUBOData("MatInfo", sizeof(float), &f, sizeof(float));
+}
+
 void MainGame::initSystems()
 {
 	srand(time(0));
 	_game.initCamera(_gameDisplay.getWidth(), _gameDisplay.getHeight());
-	_renderer.init(&_gameDisplay, &_game._camera);
-	_renderer.setupUBOs();
+	_camera = &_game._camera;
+	_renderer.init(&_gameDisplay, _camera);
+	setupUBOs();
 	loadShaders();
 	loadMeshes();
 	loadTextures();

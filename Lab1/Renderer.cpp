@@ -6,16 +6,6 @@ void Renderer::init(DisplayFacade* display, Camera* cam)
 	_camera = cam;
 }
 
-void Renderer::setupUBOs()
-{
-	UBOManager::getInstance().createUBO("Matrices", sizeof(glm::mat4) * 3, 0);
-
-	glm::mat4 identity = glm::mat4(1.0f);
-	UBOManager::getInstance().updateUBOData("Matrices", 0, glm::value_ptr(identity), sizeof(glm::mat4));
-	UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4), glm::value_ptr(_camera->getView()), sizeof(glm::mat4));
-	UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4) * 2, glm::value_ptr(_camera->getProjection()), sizeof(glm::mat4));
-}
-
 void Renderer::setActiveShader(const std::string& shaderTag)
 {
 	if (ShaderManager::getInstance().getShader(shaderTag))
@@ -58,6 +48,9 @@ void Renderer::renderGameObjects()
 		//glm::mat4 projection = _camera->getProjection();
 		//UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4), glm::value_ptr(view), sizeof(glm::mat4));
 		//UBOManager::getInstance().updateUBOData("Matrices", sizeof(glm::mat4) * 2, glm::value_ptr(projection), sizeof(glm::mat4));
+		
+		// use the scale of the object for the uv multiplier so for example on smaller asteroids the texture will appear the same size
+		UBOManager::getInstance().updateUBOData("MatInfo", 0, &obj.second->_transform->scale.x, sizeof(float));
 
 		MeshManager::getInstance().getMesh(obj.second->_meshTag)->draw();
 

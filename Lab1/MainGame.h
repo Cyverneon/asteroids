@@ -20,6 +20,7 @@ private:
 	void loadMeshes();
 	void loadShaders();
 	void loadTextures();
+	void setupUBOs();
 	void initSystems();
 	void processInput();
 	void gameLoop();
@@ -27,6 +28,8 @@ private:
 
 	DisplayFacade _gameDisplay;
 	GameState _gameState;
+
+	Camera* _camera;
 
 	float _deltaTime = 0.0f;
 	float _lastFrameTime = 0.0f;

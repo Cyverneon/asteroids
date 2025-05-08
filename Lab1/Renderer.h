@@ -16,7 +16,6 @@ class Renderer
 {
 public:
 	void init(DisplayFacade* display, Camera* cam);
-	void setupUBOs();
 	void setActiveShader(const std::string& shaderTag);
 	void clearScreenBuffer();
 	void renderGameObjects();
