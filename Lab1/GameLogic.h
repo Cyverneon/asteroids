@@ -50,8 +50,12 @@ private:
 
 	bool _bulletFired = false;
 
+	int _round = 1;
+
 	// configuration
 	
+	const int _max_asteroids = 6;
+
 	// units per second
 	const float _playerSpeed = 40.0f;
 	// degrees per second

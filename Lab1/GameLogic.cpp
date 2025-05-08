@@ -91,7 +91,7 @@ void GameLogic::spawnAsteroid(std::string size, glm::vec3 pos, glm::vec3 rot)
 
 void GameLogic::spawnAsteroidRound()
 {
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < min(2+_round, _max_asteroids); i++)
 	{
 		// asteroids only spawn on the outside of the screen so the player has time to react to them
 		// this is done by getting random value within half the max coordinates ( offset of the top and right edges from the center) then adding half again
@@ -193,6 +193,12 @@ void GameLogic::updateAsteroids(float delta)
 				// destroy bullet
 				GameObjectManager::getInstance().removeGameObject(_playerBullets[j]);
 				_playerBullets.erase(_playerBullets.begin() + j);
+
+				if (_asteroids.size() == 0)
+				{
+					_round++;
+					spawnAsteroidRound();
+				}
 				break;
 			}
 		}
