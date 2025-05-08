@@ -52,6 +52,13 @@ void MainGame::loadTextures()
 	TextureManager::getInstance().loadTexture("MetalNormal", "../res/textures/MetalNormal.png");
 }
 
+void MainGame::loadSounds()
+{
+	SoundManager::getInstance().loadSound("Laser", "../res/audio/laser.wav");
+	SoundManager::getInstance().loadSound("Thruster", "../res/audio/thruster.wav");
+	SoundManager::getInstance().loadSound("Explosion", "../res/audio/asteroid_explode.wav");
+}
+
 void MainGame::setupUBOs()
 {
 	UBOManager::getInstance().createUBO("Matrices", sizeof(glm::mat4) * 3, 0);
@@ -69,6 +76,7 @@ void MainGame::setupUBOs()
 void MainGame::initSystems()
 {
 	srand(time(0));
+	SDL_InitSubSystem(SDL_INIT_AUDIO);
 	_game.initCamera(_gameDisplay.getWidth(), _gameDisplay.getHeight());
 	_camera = &_game._camera;
 	_renderer.init(&_gameDisplay, _camera);
@@ -76,6 +84,7 @@ void MainGame::initSystems()
 	loadShaders();
 	loadMeshes();
 	loadTextures();
+	loadSounds();
 	_game.initialiseGame();
 }
 

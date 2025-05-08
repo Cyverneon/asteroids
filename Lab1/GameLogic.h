@@ -6,6 +6,7 @@
 #include "MeshManager.h"
 #include "TextureManager.h"
 #include "ShaderManager.h"
+#include "SoundManager.h"
 #include "Mesh.h"
 #include "Texture.h"
 #include "Camera.h"

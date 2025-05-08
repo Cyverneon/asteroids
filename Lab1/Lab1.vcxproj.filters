@@ -108,6 +108,12 @@
     <ClCompile Include="PhysicsEngineManager.cpp">
       <Filter>Source Files\Rendering\Management</Filter>
     </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>Source Files\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>Source Files\Rendering\Management</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DisplayFacade.h">
@@ -177,6 +183,15 @@
       <Filter>Header Files\Rendering\Management</Filter>
     </ClInclude>
     <ClInclude Include="PhysicsEngineManager.h">
+      <Filter>Header Files\Rendering\Management</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_truetype.h">
+      <Filter>Header Files\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>Header Files\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
       <Filter>Header Files\Rendering\Management</Filter>
     </ClInclude>
   </ItemGroup>

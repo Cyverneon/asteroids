@@ -63,6 +63,8 @@ void GameLogic::spawnBullet()
 	bullet->_physicsObject._collisionRadius = 0.05;
 
 	_playerBullets.push_back(bulletTag);
+
+	SoundManager::getInstance().playSound("Laser");
 }
 
 void GameLogic::spawnAsteroid(std::string size, glm::vec3 pos, glm::vec3 rot)

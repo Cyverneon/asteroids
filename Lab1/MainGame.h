@@ -20,6 +20,7 @@ private:
 	void loadMeshes();
 	void loadShaders();
 	void loadTextures();
+	void loadSounds();
 	void setupUBOs();
 	void initSystems();
 	void processInput();
